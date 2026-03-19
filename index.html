@@ -333,6 +333,26 @@
     }
 
     updateAddBtn();
+
+    // 자정 지나면 자동 갱신
+    function scheduleNextRefresh() {
+      const now = new Date();
+      const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1) - now;
+      setTimeout(() => {
+        renderCalendar();
+        renderStats();
+        scheduleNextRefresh();
+      }, msUntilMidnight + 100);
+    }
+    scheduleNextRefresh();
+
+    // 화면 다시 켤 때도 갱신
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        renderCalendar();
+        renderStats();
+      }
+    });
   </script>
 </body>
 </html>
