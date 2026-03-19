@@ -213,6 +213,10 @@
     function load() { try { return JSON.parse(localStorage.getItem(SK) || '[]'); } catch { return []; } }
     function save(d) { localStorage.setItem(SK, JSON.stringify(d)); }
     function pad(n) { return String(n).padStart(2, '0'); }
+    function getLocalDateKey(d) {
+      d = d || new Date();
+      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    }
 
     function goPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -247,7 +251,7 @@
       const dateVal = document.getElementById('input-date').value;
       const timeVal = document.getElementById('input-time').value;
       if (!dateVal || !timeVal) { showToast('날짜와 시간을 입력해주세요'); return; }
-      const entry = { id: Date.now(), ts: new Date(dateVal+'T'+timeVal+':00').toISOString(), type: selType, count: selCount, dateKey: dateVal, timeStr: timeVal };
+      const entry = { id: Date.now(), ts: dateVal+'T'+timeVal+':00', type: selType, count: selCount, dateKey: dateVal, timeStr: timeVal };
       const data = load(); data.push(entry); save(data);
       showToast((selType==='cig' ? '🟡 궐련형' : '🔴 연초') + ' ' + selCount + '개비 기록됐어요');
     }
@@ -268,7 +272,7 @@
       const firstDay = new Date(calYear,calMonth,1).getDay();
       const daysInMonth = new Date(calYear,calMonth+1,0).getDate();
       const prevDays = new Date(calYear,calMonth,0).getDate();
-      const todayKey = new Date().toISOString().slice(0,10);
+      const todayKey = getLocalDateKey();
       const total = firstDay + daysInMonth;
       const cells = total%7===0 ? total : total+(7-total%7);
       for (let i=0; i<cells; i++) {
@@ -319,7 +323,7 @@
     function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
 
     function renderStats() {
-      const data = load(), todayKey = new Date().toISOString().slice(0,10);
+      const data = load(), todayKey = getLocalDateKey();
       const todayE = data.filter(e=>e.dateKey===todayKey);
       document.getElementById('s-today-cig').textContent = todayE.filter(e=>e.type==='cig').reduce((a,e)=>a+e.count,0);
       document.getElementById('s-today-trad').textContent = todayE.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
