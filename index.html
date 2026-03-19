@@ -21,19 +21,16 @@
     .page { display: none; max-width: 440px; margin: 0 auto; padding: 1.5rem 1rem 6rem; }
     .page.active { display: block; }
 
-    /* 하단 네비게이션 */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: .5px solid var(--border-card); display: flex; justify-content: center; box-shadow: 0 -2px 16px rgba(90,100,70,0.1); z-index: 100; }
     .nav-btn { flex: 1; max-width: 160px; padding: 10px 8px 12px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-family: var(--font); transition: all .15s; }
     .nav-btn .nav-ico { font-size: 22px; }
     .nav-btn .nav-lbl { font-size: 10px; font-weight: 600; letter-spacing: .04em; }
     .nav-btn.active { color: var(--text); }
 
-    /* 헤더 */
     .hdr { text-align: center; margin-bottom: 1.8rem; padding-bottom: 1.4rem; border-bottom: .5px solid rgba(90,100,70,0.2); }
     .hdr-icon { font-size: 28px; opacity: .85; margin-bottom: .4rem; }
     .hdr h1 { font-size: 24px; font-weight: 700; color: #3a4030; letter-spacing: -0.03em; }
 
-    /* 카드 */
     .log-card, .cal-wrap, .stats-wrap, .detail { background: var(--card); border: .5px solid var(--border-card); border-radius: 16px; padding: 1.4rem; margin-bottom: 1.5rem; box-shadow: 0 2px 12px rgba(90,100,70,0.08); }
     .cal-wrap { padding: 1.2rem; }
     .detail { display: none; border-radius: 12px; padding: 1.1rem; }
@@ -42,16 +39,16 @@
     .log-label, .sec { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .75rem; padding-left: 2px; }
     .log-label { margin-bottom: 1rem; }
 
-    /* 날짜/시간 */
-    .datetime-row { display: flex; gap: 8px; margin-bottom: 1.1rem; align-items: flex-end; }
+    /* 날짜/시간 — 세로 배치 */
+    .datetime-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.1rem; }
+    .datetime-fields { display: flex; gap: 8px; }
     .datetime-field { flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .datetime-field label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; }
-    .datetime-input { width: 100%; height: 40px; padding: 0 10px; background: rgba(203,211,182,0.25); border: .5px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font); font-size: 14px; font-weight: 600; }
+    .datetime-input { width: 100%; height: 44px; padding: 0 12px; background: rgba(203,211,182,0.25); border: .5px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font); font-size: 15px; font-weight: 600; }
     .datetime-input:focus { outline: none; border-color: rgba(90,100,70,0.4); background: rgba(203,211,182,0.45); }
-    .now-btn { height: 40px; padding: 0 12px; background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 8px; color: var(--text-muted); font-family: var(--font); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .15s; }
+    .now-btn { width: 100%; height: 40px; background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 8px; color: var(--text-muted); font-family: var(--font); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
     .now-btn:hover { background: rgba(203,211,182,0.7); color: var(--text); }
 
-    /* 타입 버튼 */
     .type-row { display: flex; gap: 8px; margin-bottom: 1.1rem; }
     .type-btn { flex: 1; padding: 10px; border-radius: 10px; border: .5px solid var(--border); background: rgba(203,211,182,0.3); color: var(--text-muted); font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .type-btn .ico { font-size: 20px; }
@@ -59,7 +56,6 @@
     .type-btn.active-cig { border-color: var(--cig); background: var(--cig-dim); color: var(--cig); }
     .type-btn.active-trad { border-color: var(--trad); background: var(--trad-dim); color: var(--trad); }
 
-    /* 개비 수 */
     .count-row { margin-bottom: 1.2rem; }
     .count-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; text-align: center; }
     .count-input-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -70,7 +66,6 @@
     .count-input:focus { outline: none; border-color: rgba(90,100,70,0.4); }
     .count-unit { font-size: 13px; font-weight: 500; color: var(--text-muted); }
 
-    /* 기록 버튼 */
     .add-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; transition: all .15s; color: #fff; }
     .add-btn.cig { background: var(--cig); }
     .add-btn.cig:hover { background: #3a4566; }
@@ -78,7 +73,6 @@
     .add-btn.trad:hover { background: #b07848; }
     .add-btn:active { transform: scale(.97); }
 
-    /* 캘린더 */
     .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
     .cal-nav-btn { background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 8px; color: var(--text-sec); width: 32px; height: 32px; cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all .15s; font-family: var(--font); }
     .cal-nav-btn:hover { background: rgba(203,211,182,0.75); }
@@ -97,7 +91,6 @@
     .badge.cig { background: var(--cig-dim); color: var(--cig); }
     .badge.trad { background: var(--trad-dim); color: var(--trad); }
 
-    /* 상세 */
     .detail-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; }
     .detail-date { font-size: 13px; font-weight: 700; color: var(--text); }
     .detail-close { background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 6px; color: var(--text-muted); width: 26px; height: 26px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
@@ -117,7 +110,6 @@
     .d-del:hover { opacity: 1; }
     .detail-empty { font-size: 12px; font-weight: 500; color: var(--text-muted); padding: .3rem 0; }
 
-    /* 통계 */
     .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .stat { background: rgba(203,211,182,0.3); border: .5px solid rgba(90,100,70,0.1); border-radius: 12px; padding: .9rem; }
     .stat-lbl { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
@@ -129,30 +121,26 @@
     .stat-dual .num.t { color: var(--trad); }
     .stat-dual .unit { font-size: 10px; font-weight: 500; color: var(--text-muted); }
 
-    /* 토스트 */
     .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(30px); background: rgba(58,64,48,0.9); color: #e8edd8; font-size: 12px; font-weight: 600; font-family: var(--font); padding: 9px 18px; border-radius: 20px; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 99; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-  <!-- 기록 페이지 -->
   <div class="page active" id="page-record">
     <div class="hdr"><div class="hdr-icon">🚭</div><h1>해보자고</h1></div>
     <div class="log-label">기록 추가</div>
     <div class="log-card">
       <div class="datetime-row">
-        <div class="datetime-field"><label>날짜</label><input class="datetime-input" type="date" id="input-date"/></div>
-        <div class="datetime-field"><label>시간</label><input class="datetime-input" type="time" id="input-time"/></div>
-        <button class="now-btn" onclick="setNow()">지금</button>
+        <div class="datetime-fields">
+          <div class="datetime-field"><label>날짜</label><input class="datetime-input" type="date" id="input-date"/></div>
+          <div class="datetime-field"><label>시간</label><input class="datetime-input" type="time" id="input-time"/></div>
+        </div>
+        <button class="now-btn" onclick="setNow()">⏱ 지금 시각으로 채우기</button>
       </div>
       <div class="type-row">
-        <button class="type-btn active-cig" id="btn-cig" onclick="selectType('cig')">
-          <span class="ico">🟡</span><span class="lbl">궐련형</span>
-        </button>
-        <button class="type-btn" id="btn-trad" onclick="selectType('trad')">
-          <span class="ico">🔴</span><span class="lbl">연초</span>
-        </button>
+        <button class="type-btn active-cig" id="btn-cig" onclick="selectType('cig')"><span class="ico">🟡</span><span class="lbl">궐련형</span></button>
+        <button class="type-btn" id="btn-trad" onclick="selectType('trad')"><span class="ico">🔴</span><span class="lbl">연초</span></button>
       </div>
       <div class="count-row">
         <div class="count-label">개비 수</div>
@@ -167,7 +155,6 @@
     </div>
   </div>
 
-  <!-- 캘린더 페이지 -->
   <div class="page" id="page-calendar">
     <div class="hdr"><div class="hdr-icon">📅</div><h1>월별 캘린더</h1></div>
     <div class="cal-wrap">
@@ -188,7 +175,6 @@
     </div>
   </div>
 
-  <!-- 통계 페이지 -->
   <div class="page" id="page-stats">
     <div class="hdr"><div class="hdr-icon">📊</div><h1>이번 달 통계</h1></div>
     <div class="stats-wrap">
@@ -201,7 +187,6 @@
     </div>
   </div>
 
-  <!-- 하단 네비게이션 -->
   <nav class="bottom-nav">
     <button class="nav-btn active" id="nav-record" onclick="goPage('record')"><span class="nav-ico">✏️</span><span class="nav-lbl">기록</span></button>
     <button class="nav-btn" id="nav-calendar" onclick="goPage('calendar')"><span class="nav-ico">📅</span><span class="nav-lbl">캘린더</span></button>
@@ -253,8 +238,7 @@
       const dateVal = document.getElementById('input-date').value;
       const timeVal = document.getElementById('input-time').value;
       if (!dateVal || !timeVal) { showToast('날짜와 시간을 입력해주세요'); return; }
-      const ts = new Date(dateVal + 'T' + timeVal + ':00');
-      const entry = { id: Date.now(), ts: ts.toISOString(), type: selType, count: selCount, dateKey: dateVal, timeStr: timeVal };
+      const entry = { id: Date.now(), ts: new Date(dateVal+'T'+timeVal+':00').toISOString(), type: selType, count: selCount, dateKey: dateVal, timeStr: timeVal };
       const data = load(); data.push(entry); save(data);
       showToast((selType==='cig' ? '🟡 궐련형' : '🔴 연초') + ' ' + selCount + '개비 기록됐어요');
     }
