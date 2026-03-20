@@ -341,7 +341,7 @@ function openDetail(dk,dayNum){
       typeEl.textContent=type==='cig'?'🔵 테리아':'🟤 말보루';
       const cntInput=document.createElement('input');
       cntInput.type='number';cntInput.min='1';cntInput.max='999';cntInput.value=total;
-      cntInput.style.cssText='width:52px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
+      cntInput.style.cssText='width:52px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:16px;font-weight:700;color-scheme:dark';
       cntInput.onchange=()=>{
         const newVal=Math.max(1,parseInt(cntInput.value)||1);cntInput.value=newVal;
         const diff=newVal-total;
@@ -490,7 +490,7 @@ function openCostDetail(dk,dayNum){
     bEl.textContent=(e.brand==='테리아'?'🔵 ':'🟤 ')+e.brand;
     const aInput=document.createElement('input');
     aInput.type='number';aInput.min='1';aInput.value=e.amount;aInput.inputMode='numeric';
-    aInput.style.cssText='width:80px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
+    aInput.style.cssText='width:80px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:16px;font-weight:700;color-scheme:dark';
     aInput.onchange=()=>{const v=Math.max(1,parseInt(aInput.value)||1);aInput.value=v;const all=loadCost();const idx=all.findIndex(x=>x.id===e.id);if(idx>-1){all[idx].amount=v;saveCost(all);renderCostCalendar();renderCostList()}};
     const unitEl=document.createElement('span');unitEl.style.cssText='font-size:11px;color:var(--text-muted)';unitEl.textContent='원';
     const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
