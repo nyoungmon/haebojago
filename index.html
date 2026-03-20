@@ -448,7 +448,11 @@ function changeCostMonth(delta){costCalMonth+=delta;if(costCalMonth>11){costCalM
 function renderCostCalendar(){
   document.getElementById('cost-cal-month-label').textContent=costCalYear+'년 '+MKO[costCalMonth];
   const data=loadCost(),map={};
-  data.forEach(e=>{if(!map[e.dateKey])map[e.dateKey]={total:0,items:[]};map[e.dateKey].total+=e.amount;map[e.dateKey].items.push(e)});
+  data.forEach(e=>{
+    if(!map[e.dateKey])map[e.dateKey]={terea:false,marlboro:false};
+    if(e.brand==='테리아')map[e.dateKey].terea=true;
+    if(e.brand==='말보루')map[e.dateKey].marlboro=true;
+  });
   const grid=document.getElementById('cost-cal-grid');grid.innerHTML='';
   const firstDay=new Date(costCalYear,costCalMonth,1).getDay();
   const firstDayMon=(firstDay===0?6:firstDay-1);
@@ -466,10 +470,11 @@ function renderCostCalendar(){
     if(dk===todayKey)cell.classList.add('today');
     const numEl=document.createElement('div');numEl.className='cdn';numEl.textContent=dayNum;cell.appendChild(numEl);
     if(map[dk]){
-      const amtEl=document.createElement('div');
-      amtEl.style.cssText='font-size:9px;font-weight:700;color:var(--gold);margin-top:1px';
-      amtEl.textContent=(map[dk].total/1000).toFixed(0)+'k';
-      cell.appendChild(amtEl);
+      const dots=document.createElement('div');
+      dots.style.cssText='display:flex;gap:3px;margin-top:2px;justify-content:center';
+      if(map[dk].terea){const d=document.createElement('div');d.style.cssText='width:6px;height:6px;border-radius:50%;background:var(--cig-light)';dots.appendChild(d)}
+      if(map[dk].marlboro){const d=document.createElement('div');d.style.cssText='width:6px;height:6px;border-radius:50%;background:var(--trad-light)';dots.appendChild(d)}
+      cell.appendChild(dots);
     }
     const capDk=dk,capDay=dayNum;cell.onclick=()=>openCostDetail(capDk,capDay);grid.appendChild(cell);
   }
