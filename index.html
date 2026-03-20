@@ -9,147 +9,153 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #cbd3b6; --card: #ffffff;
-      --cig: #2c344c; --cig-dim: rgba(44,52,76,0.12);
-      --trad: #98663a; --trad-dim: rgba(152,102,58,0.12);
-      --text: #3a4030; --text-sec: #4e5644; --text-muted: #7a8470;
-      --border: rgba(90,100,70,0.15); --border-card: rgba(90,100,70,0.1);
-      --font: 'Pretendard', -apple-system, sans-serif;
+      --bg: #222222;
+      --surface: #1e1e1e;
+      --surface2: #2a2a2a;
+      --cig: #4a7c59; --cig-light: #6aaf7e; --cig-dim: rgba(74,124,89,0.15);
+      --trad: #b87333; --trad-light: #d4944a; --trad-dim: rgba(184,115,51,0.15);
+      --text: #1a1a1a; --text-sec: #444444; --text-muted: #888888;
+      --border: rgba(255,255,255,0.07);      --font: 'Pretendard', -apple-system, sans-serif;
     }
     html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
 
     .page { display: none; max-width: 440px; margin: 0 auto; padding: 1.5rem 1rem 6rem; }
     .page.active { display: block; }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: .5px solid var(--border-card); display: flex; justify-content: center; box-shadow: 0 -2px 16px rgba(90,100,70,0.1); z-index: 100; }
-    .nav-btn { flex: 1; max-width: 160px; padding: 10px 8px 12px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-family: var(--font); transition: all .15s; }
+    /* 하단 네비 */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; border-top: .5px solid var(--border); display: flex; justify-content: center; z-index: 100; }
+    .nav-btn { flex: 1; max-width: 160px; padding: 10px 8px 14px; background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-family: var(--font); transition: all .15s; }
     .nav-btn .nav-ico { font-size: 22px; }
     .nav-btn .nav-lbl { font-size: 10px; font-weight: 600; letter-spacing: .04em; }
-    .nav-btn.active { color: var(--text); }
+    .nav-btn.active { color: var(--cig-light); }
 
-    .hdr { text-align: center; margin-bottom: 1.8rem; padding-bottom: 1.4rem; border-bottom: .5px solid rgba(90,100,70,0.2); }
-    .hdr-icon { font-size: 28px; opacity: .85; margin-bottom: .4rem; }
-    .hdr h1 { font-size: 24px; font-weight: 700; color: #3a4030; letter-spacing: -0.03em; }
+    /* 헤더 */
+    .hdr { margin-bottom: 1.8rem; }
+    .hdr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .3rem; }
+    .hdr h1 { font-size: 30px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.03em; }
+    .hdr-icon { font-size: 26px; }
+    .hdr-status { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--cig-light); font-weight: 500; }
+    .hdr-status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cig-light); display: inline-block; }
 
-    .log-card, .cal-wrap, .stats-wrap, .detail { background: var(--card); border: .5px solid var(--border-card); border-radius: 16px; padding: 1.4rem; margin-bottom: 1.5rem; box-shadow: 0 2px 12px rgba(90,100,70,0.08); }
-    .cal-wrap { padding: 1.2rem; }
-    .detail { display: none; border-radius: 12px; padding: 1.1rem; }
-    .detail.open { display: block; }
+    /* 섹션 */
+    .section-title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; letter-spacing: -0.02em; }
+    .section-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 1rem; }
 
-    .log-label, .sec { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .75rem; padding-left: 2px; }
-    .log-label { margin-bottom: 1rem; }
+    /* 카드 */
+    .card { background: var(--surface); border-radius: 16px; padding: 1.2rem; margin-bottom: 10px; border: .5px solid var(--border); }
 
-    /* 날짜/시간 — 완전 세로 분리 */
-    .datetime-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.1rem; }
+    /* 날짜/시간 */
+    .datetime-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
     .datetime-field { display: flex; flex-direction: column; gap: 4px; }
     .datetime-field label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; }
-    .datetime-input {
-      width: 100%; height: 44px; padding: 0 12px;
-      background: rgba(203,211,182,0.25); border: .5px solid var(--border);
-      border-radius: 8px; color: var(--text); font-family: var(--font);
-      font-size: 15px; font-weight: 600;
-      -webkit-appearance: none; appearance: none;
-    }
-    .datetime-input:focus { outline: none; border-color: rgba(90,100,70,0.4); background: rgba(203,211,182,0.45); }
-    .now-btn { width: 100%; height: 40px; background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 8px; color: var(--text-muted); font-family: var(--font); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
-    .now-btn:hover { background: rgba(203,211,182,0.7); color: var(--text); }
+    .datetime-input { width: 100%; height: 44px; padding: 0 12px; background: var(--surface2); border: .5px solid var(--border); border-radius: 10px; color: #f0f0f0; font-family: var(--font); font-size: 15px; font-weight: 600; -webkit-appearance: none; appearance: none; color-scheme: dark; }
+    .datetime-input:focus { outline: none; border-color: var(--cig); }
+    .now-btn { width: 100%; height: 40px; background: var(--surface2); border: .5px solid var(--border); border-radius: 10px; color: var(--text-muted); font-family: var(--font); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+    .now-btn:hover { border-color: var(--cig); color: var(--cig-light); }
 
-    .type-row { display: flex; gap: 8px; margin-bottom: 1.1rem; }
-    .type-btn { flex: 1; padding: 10px; border-radius: 10px; border: .5px solid var(--border); background: rgba(203,211,182,0.3); color: var(--text-muted); font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .type-btn .ico { font-size: 20px; }
+    /* 타입 버튼 */
+    .type-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .type-btn { flex: 1; padding: 12px 10px; border-radius: 12px; border: .5px solid var(--border); background: var(--surface2); color: var(--text-muted); font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .type-btn .ico { font-size: 22px; }
     .type-btn .lbl { font-size: 11px; font-weight: 600; letter-spacing: .02em; }
-    .type-btn.active-cig { border-color: var(--cig); background: var(--cig-dim); color: var(--cig); }
-    .type-btn.active-trad { border-color: var(--trad); background: var(--trad-dim); color: var(--trad); }
+    .type-btn.active-cig { border-color: var(--cig); background: var(--cig-dim); color: var(--cig-light); }
+    .type-btn.active-trad { border-color: var(--trad); background: var(--trad-dim); color: var(--trad-light); }
 
-    .count-row { margin-bottom: 1.2rem; }
+    /* 개비 수 */
+    .count-row { margin-bottom: 1rem; }
     .count-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; text-align: center; }
     .count-input-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .count-stepper { width: 40px; height: 40px; border-radius: 8px; border: .5px solid var(--border); background: rgba(203,211,182,0.35); color: var(--text); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; user-select: none; font-weight: 600; font-family: var(--font); }
-    .count-stepper:hover { background: rgba(203,211,182,0.7); }
+    .count-stepper { width: 42px; height: 42px; border-radius: 10px; border: .5px solid var(--border); background: var(--surface2); color: #f0f0f0; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; user-select: none; font-weight: 600; font-family: var(--font); }
+    .count-stepper:hover { border-color: var(--cig); color: var(--cig-light); }
     .count-stepper:active { transform: scale(.92); }
-    .count-input { width: 72px; height: 40px; text-align: center; background: rgba(203,211,182,0.25); border: .5px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font); font-size: 22px; font-weight: 700; }
-    .count-input:focus { outline: none; border-color: rgba(90,100,70,0.4); }
+    .count-input { width: 72px; height: 42px; text-align: center; background: var(--surface2); border: .5px solid var(--border); border-radius: 10px; color: #f0f0f0; font-family: var(--font); font-size: 22px; font-weight: 700; color-scheme: dark; }
+    .count-input:focus { outline: none; border-color: var(--cig); }
     .count-unit { font-size: 13px; font-weight: 500; color: var(--text-muted); }
 
-    .add-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; transition: all .15s; color: #fff; }
+    /* 기록 버튼 */
+    .add-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-family: var(--font); font-size: 15px; font-weight: 700; cursor: pointer; transition: all .15s; color: #fff; }
     .add-btn.cig { background: var(--cig); }
-    .add-btn.cig:hover { background: #3a4566; }
+    .add-btn.cig:hover { background: var(--cig-light); }
     .add-btn.trad { background: var(--trad); }
-    .add-btn.trad:hover { background: #b07848; }
-    .add-btn:active { transform: scale(.97); }
+    .add-btn.trad:hover { background: var(--trad-light); }
+    .add-btn:active { transform: scale(.98); }
 
+    /* 캘린더 */
     .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-    .cal-nav-btn { background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 8px; color: var(--text-sec); width: 32px; height: 32px; cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all .15s; font-family: var(--font); }
-    .cal-nav-btn:hover { background: rgba(203,211,182,0.75); }
-    .cal-month { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+    .cal-month { font-size: 15px; font-weight: 700; color: #f0f0f0; letter-spacing: -0.02em; }
+    .cal-nav-btn { background: var(--surface2); border: .5px solid rgba(255,255,255,0.15); border-radius: 8px; color: #cccccc; width: 32px; height: 32px; cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all .15s; font-family: var(--font); }
+    .cal-nav-btn:hover { border-color: var(--cig); color: var(--cig-light); }
     .cal-dow { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 4px; }
     .cal-dow span { text-align: center; font-size: 9px; font-weight: 700; color: var(--text-muted); letter-spacing: .06em; padding: 4px 0; }
     .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
-    .cal-day { min-height: 50px; border-radius: 8px; border: .5px solid transparent; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 3px 2px; transition: all .15s; }
-    .cal-day:hover { background: rgba(203,211,182,0.4); }
-    .cal-day.today { border-color: rgba(90,100,70,0.45) !important; background: rgba(203,211,182,0.3); }
-    .cal-day.other-month .cal-day-num { opacity: .3; }
-    .cal-day-num { font-size: 11px; font-weight: 500; color: var(--text-sec); }
-    .cal-day.today .cal-day-num { color: var(--text); font-weight: 800; }
+    .cal-day { min-height: 48px; border-radius: 8px; border: .5px solid transparent; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 3px 2px; transition: all .15s; }
+    .cal-day:hover { background: var(--surface2); }
+    .cal-day.today { border-color: var(--cig) !important; background: var(--cig-dim); }
+    .cal-day.other-month .cal-day-num { opacity: .25; }
+    .cal-day-num { font-size: 11px; font-weight: 500; color: #cccccc; }
+    .cal-day.today .cal-day-num { color: var(--cig-light); font-weight: 800; }
     .badges { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
     .badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; line-height: 1.5; }
-    .badge.cig { background: var(--cig-dim); color: var(--cig); }
-    .badge.trad { background: var(--trad-dim); color: var(--trad); }
+    .badge.cig { background: var(--cig-dim); color: var(--cig-light); }
+    .badge.trad { background: var(--trad-dim); color: var(--trad-light); }
 
+    /* 상세 */
+    .detail { display: none; background: var(--surface2); border: .5px solid var(--border); border-radius: 12px; padding: 1rem; margin-top: 10px; }
+    .detail.open { display: block; }
     .detail-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; }
-    .detail-date { font-size: 13px; font-weight: 700; color: var(--text); }
-    .detail-close { background: rgba(203,211,182,0.4); border: .5px solid var(--border); border-radius: 6px; color: var(--text-muted); width: 26px; height: 26px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
-    .detail-close:hover { background: rgba(203,211,182,0.7); }
+    .detail-date { font-size: 13px; font-weight: 700; color: #f0f0f0; }
+    .detail-close { background: var(--surface); border: .5px solid var(--border); border-radius: 6px; color: var(--text-muted); width: 26px; height: 26px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
     .detail-list { display: flex; flex-direction: column; gap: 6px; }
     .detail-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; }
-    .detail-item.cig { background: var(--cig-dim); border: .5px solid rgba(44,52,76,.2); }
-    .detail-item.trad { background: var(--trad-dim); border: .5px solid rgba(152,102,58,.2); }
+    .detail-item.cig { background: var(--cig-dim); border: .5px solid rgba(74,124,89,.25); }
+    .detail-item.trad { background: var(--trad-dim); border: .5px solid rgba(184,115,51,.25); }
     .d-time { font-size: 13px; font-weight: 700; }
-    .detail-item.cig .d-time { color: var(--cig); }
-    .detail-item.trad .d-time { color: var(--trad); }
+    .detail-item.cig .d-time { color: var(--cig-light); }
+    .detail-item.trad .d-time { color: var(--trad-light); }
     .d-type { font-size: 11px; font-weight: 500; color: var(--text-muted); flex: 1; }
     .d-cnt { font-size: 13px; font-weight: 700; }
-    .detail-item.cig .d-cnt { color: var(--cig); }
-    .detail-item.trad .d-cnt { color: var(--trad); }
+    .detail-item.cig .d-cnt { color: var(--cig-light); }
+    .detail-item.trad .d-cnt { color: var(--trad-light); }
     .d-del { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 0 2px; opacity: .5; transition: opacity .15s; }
-    .d-del:hover { opacity: 1; }
+    .d-del:hover { opacity: 1; color: #e05555; }
     .detail-empty { font-size: 12px; font-weight: 500; color: var(--text-muted); padding: .3rem 0; }
 
+    /* 통계 */
     .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .stat { background: rgba(203,211,182,0.3); border: .5px solid rgba(90,100,70,0.1); border-radius: 12px; padding: .9rem; }
+    .stat { background: var(--surface2); border: .5px solid var(--border); border-radius: 12px; padding: .9rem; }
     .stat-lbl { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
-    .stat-val { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.03em; }
+    .stat-val { font-size: 22px; font-weight: 800; color: #f0f0f0; letter-spacing: -0.03em; }
     .stat-sub { font-size: 10px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
     .stat-dual { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
     .stat-dual .num { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; }
-    .stat-dual .num.c { color: var(--cig); }
-    .stat-dual .num.t { color: var(--trad); }
+    .stat-dual .num.c { color: var(--cig-light); }
+    .stat-dual .num.t { color: var(--trad-light); }
     .stat-dual .unit { font-size: 10px; font-weight: 500; color: var(--text-muted); }
 
-    .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(30px); background: rgba(58,64,48,0.9); color: #e8edd8; font-size: 12px; font-weight: 600; font-family: var(--font); padding: 9px 18px; border-radius: 20px; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 99; }
+    /* 토스트 */
+    .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(30px); background: var(--surface2); border: .5px solid var(--border); color: var(--text); font-size: 12px; font-weight: 600; font-family: var(--font); padding: 9px 18px; border-radius: 20px; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 99; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
+  <!-- 기록 페이지 -->
   <div class="page active" id="page-record">
-    <div class="hdr"><div class="hdr-icon">🚭</div><h1>해보자고</h1></div>
-    <div class="log-label">기록 추가</div>
-    <div class="log-card">
+    <div class="hdr">
+      <div class="hdr-top"><h1>해보자고</h1><span class="hdr-icon">🚭</span></div>
+      <div class="hdr-status">말보루 탈출</div>
+    </div>
+    <div class="section-title">기록 추가</div>
+    <div class="section-sub" id="today-label"></div>
+    <div class="card">
       <div class="datetime-row">
-        <div class="datetime-field">
-          <label>날짜</label>
-          <input class="datetime-input" type="date" id="input-date"/>
-        </div>
-        <div class="datetime-field">
-          <label>시간</label>
-          <input class="datetime-input" type="time" id="input-time"/>
-        </div>
+        <div class="datetime-field"><label>날짜</label><input class="datetime-input" type="date" id="input-date"/></div>
+        <div class="datetime-field"><label>시간</label><input class="datetime-input" type="time" id="input-time"/></div>
         <button class="now-btn" onclick="setNow()">⏱ 지금 시각으로 채우기</button>
       </div>
       <div class="type-row">
-        <button class="type-btn active-cig" id="btn-cig" onclick="selectType('cig')"><span class="ico">🟡</span><span class="lbl">궐련형</span></button>
-        <button class="type-btn" id="btn-trad" onclick="selectType('trad')"><span class="ico">🔴</span><span class="lbl">연초</span></button>
+        <button class="type-btn active-cig" id="btn-cig" onclick="selectType('cig')"><span class="ico">🟡</span><span class="lbl">테리아</span></button>
+        <button class="type-btn" id="btn-trad" onclick="selectType('trad')"><span class="ico">🔴</span><span class="lbl">말보루</span></button>
       </div>
       <div class="count-row">
         <div class="count-label">개비 수</div>
@@ -160,13 +166,17 @@
           <span class="count-unit">개비</span>
         </div>
       </div>
-      <button class="add-btn cig" id="add-btn" onclick="addEntry()">궐련형 1개비 기록</button>
+      <button class="add-btn cig" id="add-btn" onclick="addEntry()">테리아 1개비 기록</button>
     </div>
   </div>
 
+  <!-- 캘린더 페이지 -->
   <div class="page" id="page-calendar">
-    <div class="hdr"><div class="hdr-icon">📅</div><h1>월별 캘린더</h1></div>
-    <div class="cal-wrap">
+    <div class="hdr">
+      <div class="hdr-top"><h1>캘린더</h1><span class="hdr-icon">📅</span></div>
+      <div class="hdr-status">월별 기록 보기</div>
+    </div>
+    <div class="card">
       <div class="cal-nav">
         <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
         <span class="cal-month" id="cal-month-label"></span>
@@ -174,25 +184,113 @@
       </div>
       <div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
       <div class="cal-grid" id="cal-grid"></div>
-    </div>
-    <div class="detail" id="detail-panel">
-      <div class="detail-hdr">
-        <span class="detail-date" id="detail-date-label"></span>
-        <button class="detail-close" onclick="closeDetail()">✕</button>
+      <div class="detail" id="detail-panel">
+        <div class="detail-hdr">
+          <span class="detail-date" id="detail-date-label"></span>
+          <button class="detail-close" onclick="closeDetail()">✕</button>
+        </div>
+        <div class="detail-list" id="detail-list"></div>
       </div>
-      <div class="detail-list" id="detail-list"></div>
     </div>
   </div>
 
+  <!-- 통계 페이지 -->
   <div class="page" id="page-stats">
-    <div class="hdr"><div class="hdr-icon">📊</div><h1>이번 달 통계</h1></div>
-    <div class="stats-wrap">
-      <div class="stats">
-        <div class="stat"><div class="stat-lbl">이번 달 총합</div><div class="stat-dual"><span class="num c" id="s-month-cig">0</span><span class="unit">궐련</span><span class="num t" id="s-month-trad">0</span><span class="unit">연초</span></div><div class="stat-sub">개비</div></div>
-        <div class="stat"><div class="stat-lbl">오늘</div><div class="stat-dual"><span class="num c" id="s-today-cig">0</span><span class="unit">궐련</span><span class="num t" id="s-today-trad">0</span><span class="unit">연초</span></div><div class="stat-sub">개비</div></div>
-        <div class="stat"><div class="stat-lbl">기록 일수</div><div class="stat-val" id="s-days">0</div><div class="stat-sub">일째</div></div>
-        <div class="stat"><div class="stat-lbl">하루 최대</div><div class="stat-val" id="s-max">0</div><div class="stat-sub">개비 (이번 달)</div></div>
+    <div class="hdr">
+      <div class="hdr-top"><h1>통계</h1><span class="hdr-icon">📊</span></div>
+      <div class="hdr-status">이번 달 기록</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-lbl">이번 달 총합</div><div class="stat-dual"><span class="num c" id="s-month-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-month-trad">0</span><span class="unit">말보루</span></div><div class="stat-sub">개비</div></div>
+      <div class="stat"><div class="stat-lbl">오늘</div><div class="stat-dual"><span class="num c" id="s-today-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-today-trad">0</span><span class="unit">말보루</span></div><div class="stat-sub">개비</div></div>
+      <div class="stat"><div class="stat-lbl">기록 일수</div><div class="stat-val" id="s-days">0</div><div class="stat-sub">일째</div></div>
+      <div class="stat"><div class="stat-lbl">하루 최대</div><div class="stat-val" id="s-max">0</div><div class="stat-sub">개비 (이번 달)</div></div>
+    </div>
+  </div>
+
+  <!-- 비용 페이지 -->
+  <div class="page" id="page-cost">
+    <div class="hdr">
+      <div class="hdr-top"><h1>담배 비용</h1><span class="hdr-icon">💰</span></div>
+      <div class="hdr-status">이번 달 지출</div>
+    </div>
+
+    <!-- 비용 추가 카드 -->
+    <div class="card" style="margin-bottom:10px">
+      <div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem">비용 추가</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1rem">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;font-weight:600;color:#888;letter-spacing:.06em;text-transform:uppercase">날짜</label>
+          <input class="datetime-input" type="date" id="cost-date"/>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;font-weight:600;color:#888;letter-spacing:.06em;text-transform:uppercase">금액 (원)</label>
+          <input class="datetime-input" type="number" id="cost-amount" placeholder="예: 6500" style="color:#f0f0f0" inputmode="numeric"/>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;font-weight:600;color:#888;letter-spacing:.06em;text-transform:uppercase">종류</label>
+          <div style="display:flex;gap:8px">
+            <button id="brand-terea" onclick="selectBrand('테리아')"
+              style="flex:1;padding:10px;border-radius:10px;border:.5px solid rgba(255,255,255,0.07);background:#2a2a2a;color:#888;font-family:'Pretendard',-apple-system,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s">
+              🟡 테리아
+            </button>
+            <button id="brand-marlboro" onclick="selectBrand('말보루')"
+              style="flex:1;padding:10px;border-radius:10px;border:.5px solid rgba(255,255,255,0.07);background:#2a2a2a;color:#888;font-family:'Pretendard',-apple-system,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s">
+              🔴 말보루
+            </button>
+          </div>
+        </div>
+        <button class="now-btn" onclick="setCostDateNow()">⏱ 오늘 날짜로 채우기</button>
       </div>
+      <button class="add-btn cig" id="cost-add-btn" onclick="addCost()">💰 비용 기록</button>
+    </div>
+
+    <!-- 이번 달 통계 요약 -->
+    <div class="stats" style="margin-bottom:10px">
+      <div class="stat">
+        <div class="stat-lbl">이번 달 총합</div>
+        <div class="stat-val" id="cost-month-total" style="color:#6aaf7e;font-size:15px">0원</div>
+        <div class="stat-sub">지출</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">기록 건수</div>
+        <div class="stat-val" id="cost-month-count" style="color:#f0f0f0">0</div>
+        <div class="stat-sub">건</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">테리아</div>
+        <div class="stat-val" id="cost-terea-total" style="color:#6aaf7e;font-size:15px">0원</div>
+        <div class="stat-sub">이번 달</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">말보루</div>
+        <div class="stat-val" id="cost-marlboro-total" style="color:#d4944a;font-size:15px">0원</div>
+        <div class="stat-sub">이번 달</div>
+      </div>
+    </div>
+
+    <!-- 월별 캘린더 -->
+    <div class="card" style="margin-bottom:10px">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="changeCostMonth(-1)">‹</button>
+        <span class="cal-month" id="cost-cal-month-label"></span>
+        <button class="cal-nav-btn" onclick="changeCostMonth(1)">›</button>
+      </div>
+      <div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+      <div class="cal-grid" id="cost-cal-grid"></div>
+      <div class="detail" id="cost-detail-panel">
+        <div class="detail-hdr">
+          <span class="detail-date" id="cost-detail-date-label"></span>
+          <button class="detail-close" onclick="closeCostDetail()">✕</button>
+        </div>
+        <div class="detail-list" id="cost-detail-list"></div>
+      </div>
+    </div>
+
+    <!-- 이번 달 내역 -->
+    <div class="card">
+      <div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem">이번 달 내역</div>
+      <div id="cost-list"></div>
     </div>
   </div>
 
@@ -200,6 +298,7 @@
     <button class="nav-btn active" id="nav-record" onclick="goPage('record')"><span class="nav-ico">✏️</span><span class="nav-lbl">기록</span></button>
     <button class="nav-btn" id="nav-calendar" onclick="goPage('calendar')"><span class="nav-ico">📅</span><span class="nav-lbl">캘린더</span></button>
     <button class="nav-btn" id="nav-stats" onclick="goPage('stats')"><span class="nav-ico">📊</span><span class="nav-lbl">통계</span></button>
+    <button class="nav-btn" id="nav-cost" onclick="goPage('cost')"><span class="nav-ico">💰</span><span class="nav-lbl">비용</span></button>
   </nav>
   <div class="toast" id="toast"></div>
 
@@ -213,10 +312,7 @@
     function load() { try { return JSON.parse(localStorage.getItem(SK) || '[]'); } catch { return []; } }
     function save(d) { localStorage.setItem(SK, JSON.stringify(d)); }
     function pad(n) { return String(n).padStart(2, '0'); }
-    function getLocalDateKey(d) {
-      d = d || new Date();
-      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
-    }
+    function getLocalDateKey(d) { d = d || new Date(); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
 
     function goPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -225,6 +321,7 @@
       document.getElementById('nav-' + name).classList.add('active');
       if (name === 'calendar') renderCalendar();
       if (name === 'stats') renderStats();
+      if (name === 'cost') { setCostDateNow(); selectBrand('테리아'); renderCost(); }
     }
 
     function setNow() {
@@ -233,6 +330,14 @@
       document.getElementById('input-time').value = pad(n.getHours()) + ':' + pad(n.getMinutes());
     }
     setNow();
+
+    function updateTodayLabel() {
+      const n = new Date();
+      const el = document.getElementById('today-label');
+      if (el) el.textContent = n.getFullYear() + '년 ' + MONTHS_KO[n.getMonth()] + ' ' + n.getDate() + '일 ' + DAYS_KO[n.getDay()] + '요일';
+    }
+    updateTodayLabel();
+    setInterval(updateTodayLabel, 60000);
 
     function onCountInput(el) { let v = parseInt(el.value); if (isNaN(v)||v<1) v=1; if (v>99) v=99; selCount=v; el.value=v; updateAddBtn(); }
     function stepCount(delta) { const el=document.getElementById('count-input'); let v=Math.max(1,Math.min(99,(parseInt(el.value)||1)+delta)); el.value=v; selCount=v; updateAddBtn(); }
@@ -244,7 +349,7 @@
     }
     function updateAddBtn() {
       const btn = document.getElementById('add-btn');
-      btn.textContent = (selType==='cig' ? '궐련형' : '연초') + ' ' + selCount + '개비 기록';
+      btn.textContent = (selType==='cig' ? '테리아' : '말보루') + ' ' + selCount + '개비 기록';
       btn.className = 'add-btn ' + selType;
     }
     function addEntry() {
@@ -253,7 +358,7 @@
       if (!dateVal || !timeVal) { showToast('날짜와 시간을 입력해주세요'); return; }
       const entry = { id: Date.now(), ts: dateVal+'T'+timeVal+':00', type: selType, count: selCount, dateKey: dateVal, timeStr: timeVal };
       const data = load(); data.push(entry); save(data);
-      showToast((selType==='cig' ? '🟡 궐련형' : '🔴 연초') + ' ' + selCount + '개비 기록됐어요');
+      showToast((selType==='cig' ? '🟡 테리아' : '🔴 말보루') + ' ' + selCount + '개비 기록됐어요');
     }
     function deleteEntry(id) {
       save(load().filter(e => e.id !== id)); renderCalendar(); renderStats();
@@ -309,7 +414,7 @@
         entries.forEach(e => {
           const item = document.createElement('div'); item.className='detail-item '+e.type;
           const timeEl = document.createElement('span'); timeEl.className='d-time'; timeEl.textContent=e.timeStr;
-          const typeEl = document.createElement('span'); typeEl.className='d-type'; typeEl.textContent=e.type==='cig'?'🟡 궐련형':'🔴 연초';
+          const typeEl = document.createElement('span'); typeEl.className='d-type'; typeEl.textContent=e.type==='cig'?'🟡 테리아':'🔴 말보루';
           const cntEl = document.createElement('span'); cntEl.className='d-cnt'; cntEl.textContent=e.count+'개비';
           const delBtn = document.createElement('button'); delBtn.className='d-del'; delBtn.textContent='✕';
           delBtn.onclick = (ev) => { ev.stopPropagation(); deleteEntry(e.id); };
@@ -336,27 +441,183 @@
       document.getElementById('s-max').textContent = Object.values(dayMap).length ? Math.max(...Object.values(dayMap)) : 0;
     }
 
-    updateAddBtn();
-
-    // 자정 지나면 자동 갱신
     function scheduleNextRefresh() {
-      const now = new Date();
-      const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1) - now;
-      setTimeout(() => {
-        renderCalendar();
-        renderStats();
-        scheduleNextRefresh();
-      }, msUntilMidnight + 100);
+      const n = new Date();
+      const msUntilMidnight = new Date(n.getFullYear(),n.getMonth(),n.getDate()+1) - n;
+      setTimeout(() => { renderCalendar(); renderStats(); updateTodayLabel(); scheduleNextRefresh(); }, msUntilMidnight + 100);
     }
     scheduleNextRefresh();
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { renderCalendar(); renderStats(); } });
 
-    // 화면 다시 켤 때도 갱신
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        renderCalendar();
-        renderStats();
+    // 비용 관련
+    const CSK = 'cig_cost_entries';
+    let selBrand = '테리아';
+    let costCalYear = new Date().getFullYear();
+    let costCalMonth = new Date().getMonth();
+
+    function loadCost() { try { return JSON.parse(localStorage.getItem(CSK) || '[]'); } catch { return []; } }
+    function saveCost(d) { localStorage.setItem(CSK, JSON.stringify(d)); }
+
+    function selectBrand(brand) {
+      selBrand = brand;
+      const tBtn = document.getElementById('brand-terea');
+      const mBtn = document.getElementById('brand-marlboro');
+      if (brand === '테리아') {
+        tBtn.style.borderColor = '#4a7c59'; tBtn.style.background = 'rgba(74,124,89,0.15)'; tBtn.style.color = '#6aaf7e';
+        mBtn.style.borderColor = 'rgba(255,255,255,0.07)'; mBtn.style.background = '#2a2a2a'; mBtn.style.color = '#888';
+      } else {
+        mBtn.style.borderColor = '#b87333'; mBtn.style.background = 'rgba(184,115,51,0.15)'; mBtn.style.color = '#d4944a';
+        tBtn.style.borderColor = 'rgba(255,255,255,0.07)'; tBtn.style.background = '#2a2a2a'; tBtn.style.color = '#888';
       }
-    });
+    }
+
+    function setCostDateNow() {
+      const n = new Date();
+      const el = document.getElementById('cost-date');
+      if (el) el.value = n.getFullYear() + '-' + pad(n.getMonth()+1) + '-' + pad(n.getDate());
+    }
+
+    function addCost() {
+      const dateVal = document.getElementById('cost-date').value;
+      const amount = parseInt(document.getElementById('cost-amount').value);
+      if (!dateVal) { showToast('날짜를 입력해주세요'); return; }
+      if (!amount || amount <= 0) { showToast('금액을 입력해주세요'); return; }
+      const entry = { id: Date.now(), dateKey: dateVal, amount, brand: selBrand };
+      const data = loadCost(); data.push(entry); saveCost(data);
+      document.getElementById('cost-amount').value = '';
+      showToast('💰 ' + amount.toLocaleString() + '원 기록됐어요');
+      renderCost();
+    }
+
+    function deleteCost(id) { saveCost(loadCost().filter(e => e.id !== id)); renderCost(); }
+
+    function changeCostMonth(delta) {
+      costCalMonth += delta;
+      if (costCalMonth > 11) { costCalMonth = 0; costCalYear++; }
+      if (costCalMonth < 0) { costCalMonth = 11; costCalYear--; }
+      renderCostCalendar();
+    }
+
+    function renderCostCalendar() {
+      const MONTHS_KO2 = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+      document.getElementById('cost-cal-month-label').textContent = costCalYear + '년 ' + MONTHS_KO2[costCalMonth];
+      const data = loadCost(), map = {};
+      data.forEach(e => {
+        if (!map[e.dateKey]) map[e.dateKey] = { total: 0, items: [] };
+        map[e.dateKey].total += e.amount;
+        map[e.dateKey].items.push(e);
+      });
+      const grid = document.getElementById('cost-cal-grid'); grid.innerHTML = '';
+      const firstDay = new Date(costCalYear, costCalMonth, 1).getDay();
+      const daysInMonth = new Date(costCalYear, costCalMonth+1, 0).getDate();
+      const prevDays = new Date(costCalYear, costCalMonth, 0).getDate();
+      const todayKey = getLocalDateKey();
+      const total = firstDay + daysInMonth;
+      const cells = total%7===0 ? total : total+(7-total%7);
+      for (let i=0; i<cells; i++) {
+        const cell = document.createElement('div'); cell.className = 'cal-day';
+        let dayNum, dk, isOther = false;
+        if (i < firstDay) { dayNum=prevDays-firstDay+i+1; const pm=costCalMonth===0?11:costCalMonth-1; const py=costCalMonth===0?costCalYear-1:costCalYear; dk=getDateKey(py,pm,dayNum); isOther=true; }
+        else if (i >= firstDay+daysInMonth) { dayNum=i-firstDay-daysInMonth+1; const nm=costCalMonth===11?0:costCalMonth+1; const ny=costCalMonth===11?costCalYear+1:costCalYear; dk=getDateKey(ny,nm,dayNum); isOther=true; }
+        else { dayNum=i-firstDay+1; dk=getDateKey(costCalYear,costCalMonth,dayNum); }
+        if (isOther) cell.classList.add('other-month');
+        if (dk===todayKey) cell.classList.add('today');
+        const numEl = document.createElement('div'); numEl.className='cal-day-num'; numEl.textContent=dayNum; cell.appendChild(numEl);
+        if (map[dk]) {
+          const amtEl = document.createElement('div');
+          amtEl.style.cssText = 'font-size:9px;font-weight:700;color:#6aaf7e;margin-top:1px';
+          amtEl.textContent = (map[dk].total/1000).toFixed(0) + 'k';
+          cell.appendChild(amtEl);
+        }
+        const capDk=dk, capDay=dayNum;
+        cell.onclick = () => openCostDetail(capDk, capDay);
+        grid.appendChild(cell);
+      }
+    }
+
+    function openCostDetail(dk, dayNum) {
+      const data = loadCost();
+      const entries = data.filter(e => e.dateKey === dk).sort((a,b) => b.id - a.id);
+      const MONTHS_KO2 = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+      const [y,m] = dk.split('-').map(Number);
+      document.getElementById('cost-detail-date-label').textContent = y+'년 '+MONTHS_KO2[m-1]+' '+dayNum+'일';
+      const panel = document.getElementById('cost-detail-panel'); panel.dataset.dk=dk; panel.dataset.day=dayNum;
+      const list = document.getElementById('cost-detail-list'); list.innerHTML = '';
+      if (!entries.length) {
+        const em = document.createElement('div'); em.className='detail-empty'; em.textContent='이날 기록이 없어요'; list.appendChild(em);
+      } else {
+        entries.forEach(e => {
+          const item = document.createElement('div'); item.className='detail-item';
+          item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:rgba(74,124,89,0.12);border:.5px solid rgba(74,124,89,0.25);margin-bottom:4px';
+          const brandEl = document.createElement('span');
+          brandEl.style.cssText = 'font-size:12px;font-weight:700;flex:1;color:' + (e.brand==='테리아' ? '#6aaf7e' : '#d4944a');
+          brandEl.textContent = (e.brand==='테리아' ? '🟡 ' : '🔴 ') + e.brand;
+          const amtEl = document.createElement('span');
+          amtEl.style.cssText = 'font-size:13px;font-weight:700;color:#6aaf7e';
+          amtEl.textContent = e.amount.toLocaleString() + '원';
+          const delBtn = document.createElement('button');
+          delBtn.style.cssText = 'background:transparent;border:none;color:#666;cursor:pointer;font-size:13px;opacity:.6';
+          delBtn.textContent = '✕';
+          delBtn.onclick = (ev) => { ev.stopPropagation(); deleteCost(e.id); openCostDetail(capDk, dayNum); };
+          const capDk = dk;
+          item.appendChild(brandEl); item.appendChild(amtEl); item.appendChild(delBtn);
+          list.appendChild(item);
+        });
+      }
+      panel.classList.add('open'); panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+
+    function closeCostDetail() { document.getElementById('cost-detail-panel').classList.remove('open'); }
+
+    function renderCostList() {
+      const PRICE = { '테리아': 4800, '말보루': 4500 };
+      const data = loadCost();
+      const n = new Date();
+      const mPrefix = n.getFullYear() + '-' + pad(n.getMonth()+1);
+      const mData = data.filter(e => e.dateKey.startsWith(mPrefix)).sort((a,b) => b.dateKey.localeCompare(a.dateKey));
+      const total = mData.reduce((a,e) => a + e.amount, 0);
+      const tereaTotal = mData.filter(e=>e.brand==='테리아').reduce((a,e)=>a+e.amount,0);
+      const marlboroTotal = mData.filter(e=>e.brand==='말보루').reduce((a,e)=>a+e.amount,0);
+      const tereaPacks = Math.round(tereaTotal / PRICE['테리아'] * 10) / 10;
+      const marlboroPacks = Math.round(marlboroTotal / PRICE['말보루'] * 10) / 10;
+      const totalPacks = Math.round((tereaTotal / PRICE['테리아'] + marlboroTotal / PRICE['말보루']) * 10) / 10;
+      document.getElementById('cost-month-total').textContent = total.toLocaleString() + '원 (' + totalPacks + '갑)';
+      document.getElementById('cost-month-count').textContent = mData.length;
+      document.getElementById('cost-terea-total').textContent = tereaTotal.toLocaleString() + '원 (' + tereaPacks + '갑)';
+      document.getElementById('cost-marlboro-total').textContent = marlboroTotal.toLocaleString() + '원 (' + marlboroPacks + '갑)';
+      const list = document.getElementById('cost-list');
+      if (!mData.length) { list.innerHTML = '<div style="font-size:12px;color:#888;padding:.3rem 0">이번 달 기록이 없어요</div>'; return; }
+      list.innerHTML = '';
+      mData.forEach(e => {
+        const packs = Math.round(e.amount / PRICE[e.brand] * 10) / 10;
+        const item = document.createElement('div');
+        item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid rgba(255,255,255,0.07)';
+        const left = document.createElement('div');
+        const dateEl = document.createElement('div');
+        dateEl.style.cssText = 'font-size:12px;color:#888;font-weight:500;margin-bottom:2px';
+        dateEl.textContent = e.dateKey;
+        const brandEl = document.createElement('div');
+        brandEl.style.cssText = 'font-size:11px;font-weight:600;color:' + (e.brand==='테리아' ? '#6aaf7e' : '#d4944a');
+        brandEl.textContent = (e.brand==='테리아' ? '🟡 ' : '🔴 ') + e.brand;
+        left.appendChild(dateEl); left.appendChild(brandEl);
+        const right = document.createElement('div');
+        right.style.cssText = 'display:flex;align-items:center;gap:10px';
+        const amtEl = document.createElement('div');
+        amtEl.style.cssText = 'font-size:14px;font-weight:700;color:#6aaf7e;text-align:right';
+        amtEl.innerHTML = e.amount.toLocaleString() + '원<br><span style="font-size:11px;font-weight:500;color:#888">(' + packs + '갑)</span>';
+        const delBtn = document.createElement('button');
+        delBtn.style.cssText = 'background:transparent;border:none;color:#666;cursor:pointer;font-size:14px;opacity:.6';
+        delBtn.textContent = '✕';
+        delBtn.onclick = () => deleteCost(e.id);
+        right.appendChild(amtEl); right.appendChild(delBtn);
+        item.appendChild(left); item.appendChild(right);
+        list.appendChild(item);
+      });
+    }
+
+    function renderCost() { renderCostCalendar(); renderCostList(); }
+
+    updateAddBtn();
   </script>
 </body>
 </html>
