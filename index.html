@@ -136,8 +136,10 @@
     <h1><b>해보자고</b></h1>
   </div>
   <div class="today-txt" id="today-label"></div>
-  <div class="slbl">기록 추가</div>
-  <div class="card">
+
+  <!-- 흡연 기록 -->
+  <div class="slbl">🚬 흡연 기록</div>
+  <div class="card" style="border-left:2px solid rgba(255,255,255,0.3)">
     <div class="fld"><label>날짜</label><input class="finput" type="date" id="input-date"/></div>
     <button class="tbtn" onclick="setNow()">⏱ 오늘 날짜로 채우기</button>
     <div class="trow">
@@ -155,12 +157,39 @@
     </div>
     <button class="rbtn cig" id="add-btn" onclick="addEntry()">테리아 1개비 기록</button>
   </div>
+
+  <!-- 비용 기록 -->
+  <div class="slbl" style="margin-top:1.2rem">💰 비용 기록</div>
+  <div class="card" style="border-left:2px solid var(--gold)">
+    <div class="fld"><label>날짜</label><input class="finput" type="date" id="cost-date"/></div>
+    <div class="fld"><label>금액 (원)</label><input class="finput" type="number" id="cost-amount" placeholder="예: 6500" inputmode="numeric"/></div>
+    <div class="fld" style="margin-bottom:12px">
+      <label>종류</label>
+      <div class="brow" style="margin-bottom:0">
+        <button class="bbtn" id="brand-terea" onclick="selectBrand('테리아')">🔵 테리아</button>
+        <button class="bbtn" id="brand-marlboro" onclick="selectBrand('말보루')">🟤 말보루</button>
+      </div>
+    </div>
+    <button class="tbtn" onclick="setCostDateNow()" style="margin-bottom:12px">⏱ 오늘 날짜로 채우기</button>
+    <button class="costbtn" onclick="addCost()">💰 비용 기록</button>
+  </div>
+
+  <!-- 데이터 백업 -->
+  <div class="slbl" style="margin-top:1.2rem">🗄️ 데이터 백업</div>
+  <div class="card" style="border-left:2px solid var(--text-muted)">
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;line-height:1.7">폰 교체나 브라우저 초기화 전에 데이터를 저장해두세요.</div>
+    <div style="display:flex;gap:8px">
+      <button class="tbtn" style="margin-bottom:0;flex:1" onclick="exportData()">⬇️ 내보내기</button>
+      <button class="tbtn" style="margin-bottom:0;flex:1" onclick="document.getElementById('import-file').click()">⬆️ 가져오기</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)"/>
+    </div>
+  </div>
 </div>
 
 <div class="page" id="page-calendar">
   <div class="hdr">
     <div class="eyebrow">월별 기록 보기</div>
-    <h1><b>캘린더</b></h1>
+    <h1><b>개 수 기록</b></h1>
   </div>
   <div class="card">
     <div class="calhdr">
@@ -175,57 +204,44 @@
       <div class="detlist" id="detail-list"></div>
     </div>
   </div>
+  <div class="slbl">🚬 흡연 통계</div>
+  <div class="sgrid">
+    <div class="sc"><div class="sclbl">월 총합</div><div class="sdual"><span class="num c" id="s-month-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-month-trad">0</span><span class="unit">말보루</span></div><div class="scsub">개비</div></div>
+    <div class="sc"><div class="sclbl">오늘</div><div class="sdual"><span class="num c" id="s-today-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-today-trad">0</span><span class="unit">말보루</span></div><div class="scsub">개비</div></div>
+    <div class="sc" style="grid-column:span 2"><div class="sclbl">이번 달 최다 흡연일</div><div class="scval" id="s-max-date" style="font-size:18px">-</div><div class="scsub" id="s-max-sub"></div></div>
+  </div>
 </div>
 
 <div class="page" id="page-cost">
   <div class="hdr">
-    <div class="eyebrow">이번 달 지출</div>
+    <div class="eyebrow">월별 지출 보기</div>
     <h1><b>담배 비용</b></h1>
   </div>
-  <div class="slbl">비용 추가</div>
   <div class="card">
-    <div class="fld"><label>날짜</label><input class="finput" type="date" id="cost-date"/></div>
-    <div class="fld"><label>금액 (원)</label><input class="finput" type="number" id="cost-amount" placeholder="예: 6500" inputmode="numeric"/></div>
-    <div class="fld" style="margin-bottom:12px">
-      <label>종류</label>
-      <div class="brow" style="margin-bottom:0">
-        <button class="bbtn" id="brand-terea" onclick="selectBrand('테리아')">🔵 테리아</button>
-        <button class="bbtn" id="brand-marlboro" onclick="selectBrand('말보루')">🟤 말보루</button>
-      </div>
+    <div class="calhdr">
+      <button class="calnav" onclick="changeCostMonth(-1)">‹</button>
+      <span class="calmon" id="cost-cal-month-label"></span>
+      <button class="calnav" onclick="changeCostMonth(1)">›</button>
     </div>
-    <button class="tbtn" onclick="setCostDateNow()" style="margin-bottom:12px">⏱ 오늘 날짜로 채우기</button>
-    <button class="costbtn" onclick="addCost()">💰 비용 기록</button>
+    <div class="caldow"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
+    <div class="calgrid" id="cost-cal-grid"></div>
+    <div class="detail" id="cost-detail-panel">
+      <div class="dethdr"><span class="detdate" id="cost-detail-date-label"></span><button class="detclose" onclick="closeCostDetail()">✕</button></div>
+      <div class="detlist" id="cost-detail-list"></div>
+    </div>
   </div>
-  <div class="slbl">이번 달 내역</div>
-  <div class="card"><div id="cost-list"><div style="font-size:12px;color:#606060;padding:.3rem 0">이번 달 기록이 없어요</div></div></div>
-</div>
-
-<div class="page" id="page-stats">
-  <div class="hdr">
-    <div class="eyebrow">이번 달 기록</div>
-    <h1><b>통계</b></h1>
-  </div>
-  <div class="slbl">🚬 흡연</div>
-  <div class="sgrid" style="margin-bottom:1.5rem">
-    <div class="sc"><div class="sclbl">이번 달 총합</div><div class="sdual"><span class="num c" id="s-month-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-month-trad">0</span><span class="unit">말보루</span></div><div class="scsub">개비</div></div>
-    <div class="sc"><div class="sclbl">오늘</div><div class="sdual"><span class="num c" id="s-today-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-today-trad">0</span><span class="unit">말보루</span></div><div class="scsub">개비</div></div>
-    <div class="sc"><div class="sclbl">기록 일수</div><div class="scval" id="s-days">0</div><div class="scsub">일째</div></div>
-    <div class="sc"><div class="sclbl">하루 최대</div><div class="scval" id="s-max">0</div><div class="scsub">개비 (이번 달)</div></div>
-  </div>
-  <div class="slbl">💰 지출</div>
-  <div class="sgrid">
-    <div class="sc"><div class="sclbl">이번 달 총합</div><div class="scval" id="cost-month-total" style="font-size:18px">0원</div><div class="scsub">지출</div></div>
-    <div class="sc"><div class="sclbl">기록 건수</div><div class="scval" id="cost-month-count">0</div><div class="scsub">건</div></div>
+  <div class="slbl">💰 지출 통계</div>
+  <div class="sgrid" style="margin-bottom:12px">
     <div class="sc"><div class="sclbl">테리아</div><div class="scval" id="cost-terea-total" style="color:var(--cig-light);font-size:16px">0원</div><div class="scsub">이번 달</div></div>
     <div class="sc"><div class="sclbl">말보루</div><div class="scval" id="cost-marlboro-total" style="color:var(--trad-light);font-size:16px">0원</div><div class="scsub">이번 달</div></div>
+    <div class="sc" style="grid-column:span 2"><div class="sclbl">월 총합</div><div class="scval" id="cost-month-total" style="font-size:20px">0원</div><div class="scsub">지출</div></div>
   </div>
 </div>
 
 <nav class="nav">
-  <button class="nb active" id="nav-record" onclick="goPage('record')"><span class="ni">✏️</span><span class="nl">기록</span></button>
-  <button class="nb" id="nav-calendar" onclick="goPage('calendar')"><span class="ni">📅</span><span class="nl">캘린더</span></button>
-  <button class="nb" id="nav-cost" onclick="goPage('cost')"><span class="ni">💰</span><span class="nl">비용</span></button>
-  <button class="nb" id="nav-stats" onclick="goPage('stats')"><span class="ni">📊</span><span class="nl">통계</span></button>
+  <button class="nb active" id="nav-record" onclick="goPage('record')"><span class="ni">✏️</span><span class="nl">해보자고</span></button>
+  <button class="nb" id="nav-calendar" onclick="goPage('calendar')"><span class="ni">📅</span><span class="nl">흡연 통계</span></button>
+  <button class="nb" id="nav-cost" onclick="goPage('cost')"><span class="ni">💰</span><span class="nl">지출 통계</span></button>
 </nav>
 <div class="toast" id="toast"></div>
 
@@ -246,9 +262,9 @@ function goPage(name){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if(name==='calendar')renderCalendar();
-  if(name==='stats'){renderStats();renderCostList()}
-  if(name==='cost'){setCostDateNow();selectBrand('테리아');renderCostList()}
+  if(name==='record'){setNow();setCostDateNow();selectBrand('테리아')}
+  if(name==='calendar'){renderCalendar();renderStats()}
+  if(name==='cost'){renderCostCalendar();renderCostList()}
 }
 function setNow(){const n=new Date();document.getElementById('input-date').value=n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate())}
 setNow();
@@ -294,21 +310,44 @@ function openDetail(dk,dayNum){
   const panel=document.getElementById('detail-panel');panel.dataset.dk=dk;panel.dataset.day=dayNum;
   const list=document.getElementById('detail-list');list.innerHTML='';
   if(!entries.length){const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em)}
-  else{entries.forEach(e=>{const item=document.createElement('div');item.className='detitem '+e.type;const typeEl=document.createElement('span');typeEl.className='dtype';typeEl.textContent=e.type==='cig'?'🔵 테리아':'🟤 말보루';const cntEl=document.createElement('span');cntEl.className='dcnt';cntEl.textContent=e.count+'개비';const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';delBtn.onclick=(ev)=>{ev.stopPropagation();deleteEntry(e.id)};item.appendChild(typeEl);item.appendChild(cntEl);item.appendChild(delBtn);list.appendChild(item)})}
+  else{entries.forEach(e=>{
+    const item=document.createElement('div');item.className='detitem '+e.type;
+    const typeEl=document.createElement('span');typeEl.className='dtype';typeEl.textContent=e.type==='cig'?'🔵 테리아':'🟤 말보루';
+    // 수정 가능한 개비 수 입력
+    const cntInput=document.createElement('input');
+    cntInput.type='number';cntInput.min='1';cntInput.max='99';cntInput.value=e.count;
+    cntInput.style.cssText='width:48px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
+    cntInput.onchange=()=>{
+      const v=Math.max(1,Math.min(99,parseInt(cntInput.value)||1));
+      cntInput.value=v;
+      const all=load();const idx=all.findIndex(x=>x.id===e.id);
+      if(idx>-1){all[idx].count=v;save(all);renderCalendar();renderStats();}
+    };
+    const unitEl=document.createElement('span');unitEl.style.cssText='font-size:11px;color:var(--text-muted)';unitEl.textContent='개비';
+    const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
+    delBtn.onclick=(ev)=>{ev.stopPropagation();deleteEntry(e.id)};
+    item.appendChild(typeEl);item.appendChild(cntInput);item.appendChild(unitEl);item.appendChild(delBtn);
+    list.appendChild(item);
+  })}
   panel.classList.add('open');panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function closeDetail(){document.getElementById('detail-panel').classList.remove('open')}
 function renderStats(){
   const data=load(),todayKey=getLocalDateKey();
+  // 오늘은 항상 실제 오늘 기준
   const todayE=data.filter(e=>e.dateKey===todayKey);
   document.getElementById('s-today-cig').textContent=todayE.filter(e=>e.type==='cig').reduce((a,e)=>a+e.count,0);
   document.getElementById('s-today-trad').textContent=todayE.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
+  // 월 총합/최대는 캘린더 월 기준
   const mP=calYear+'-'+pad(calMonth+1);const mE=data.filter(e=>e.dateKey.startsWith(mP));
   document.getElementById('s-month-cig').textContent=mE.filter(e=>e.type==='cig').reduce((a,e)=>a+e.count,0);
   document.getElementById('s-month-trad').textContent=mE.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
-  document.getElementById('s-days').textContent=new Set(mE.map(e=>e.dateKey)).size;
   const dm={};mE.forEach(e=>{dm[e.dateKey]=(dm[e.dateKey]||0)+e.count});
-  document.getElementById('s-max').textContent=Object.values(dm).length?Math.max(...Object.values(dm)):0;
+  const maxDate=Object.keys(dm).sort((a,b)=>dm[b]-dm[a])[0];
+  const maxEl=document.getElementById('s-max-date');
+  const maxSub=document.getElementById('s-max-sub');
+  if(maxDate){const [y,mo,d]=maxDate.split('-').map(Number);maxEl.textContent=MKO[mo-1]+' '+d+'일';maxSub.textContent=dm[maxDate]+'개비'}
+  else{maxEl.textContent='-';maxSub.textContent=''}
 }
 function scheduleNextRefresh(){const n=new Date();const ms=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n;setTimeout(()=>{renderCalendar();renderStats();updateTodayLabel();scheduleNextRefresh()},ms+100)}
 scheduleNextRefresh();
@@ -329,8 +368,8 @@ function addCost(){
 }
 function deleteCost(id){saveCost(loadCost().filter(e=>e.id!==id));renderCostList()}
 function renderCostList(){
-  const PR={'테리아':4800,'말보루':4500};const data=loadCost();const n=new Date();
-  const mP=n.getFullYear()+'-'+pad(n.getMonth()+1);
+  const PR={'테리아':4800,'말보루':4500};const data=loadCost();
+  const mP=costCalYear+'-'+pad(costCalMonth+1);
   const mD=data.filter(e=>e.dateKey.startsWith(mP)).sort((a,b)=>b.dateKey.localeCompare(a.dateKey));
   const tot=mD.reduce((a,e)=>a+e.amount,0);
   const tT=mD.filter(e=>e.brand==='테리아').reduce((a,e)=>a+e.amount,0);
@@ -339,27 +378,88 @@ function renderCostList(){
   const totPk=Math.round((tT/PR['테리아']+mT/PR['말보루'])*10)/10;
   const $=id=>document.getElementById(id);
   if($('cost-month-total')){$('cost-month-total').textContent=tot.toLocaleString()+'원 ('+totPk+'갑)'}
-  if($('cost-month-count'))$('cost-month-count').textContent=mD.length;
   if($('cost-terea-total'))$('cost-terea-total').textContent=tT.toLocaleString()+'원 ('+tPk+'갑)';
   if($('cost-marlboro-total'))$('cost-marlboro-total').textContent=mT.toLocaleString()+'원 ('+mPk+'갑)';
-  const list=document.getElementById('cost-list');if(!list)return;
-  if(!mD.length){list.innerHTML='<div style="font-size:12px;color:#606060;padding:.3rem 0">이번 달 기록이 없어요</div>';return}
-  list.innerHTML='';
-  mD.forEach(e=>{
-    const packs=Math.round(e.amount/PR[e.brand]*10)/10;
-    const item=document.createElement('div');item.className='costi';
-    const left=document.createElement('div');
-    const dEl=document.createElement('div');dEl.className='costi-date';dEl.textContent=e.dateKey;
-    const bEl=document.createElement('div');bEl.className='costi-brand';bEl.style.color=e.brand==='테리아'?'var(--cig-light)':'var(--trad-light)';bEl.textContent=(e.brand==='테리아'?'🔵 ':'🟤 ')+e.brand;
-    left.appendChild(dEl);left.appendChild(bEl);
-    const right=document.createElement('div');right.style.cssText='display:flex;align-items:center';
-    const aw=document.createElement('div');
-    const aEl=document.createElement('div');aEl.className='costi-amt';aEl.textContent=e.amount.toLocaleString()+'원';
-    const pEl=document.createElement('div');pEl.className='costi-packs';pEl.textContent=packs+'갑';
-    aw.appendChild(aEl);aw.appendChild(pEl);
-    const del=document.createElement('button');del.className='costdel';del.textContent='✕';del.onclick=()=>deleteCost(e.id);
-    right.appendChild(aw);right.appendChild(del);item.appendChild(left);item.appendChild(right);list.appendChild(item);
-  });
+}
+// 비용 캘린더
+let costCalYear=new Date().getFullYear(),costCalMonth=new Date().getMonth();
+function changeCostMonth(delta){costCalMonth+=delta;if(costCalMonth>11){costCalMonth=0;costCalYear++}if(costCalMonth<0){costCalMonth=11;costCalYear--}renderCostCalendar();renderCostList()}
+function renderCostCalendar(){
+  document.getElementById('cost-cal-month-label').textContent=costCalYear+'년 '+MKO[costCalMonth];
+  const data=loadCost(),map={};
+  data.forEach(e=>{if(!map[e.dateKey])map[e.dateKey]={total:0,items:[]};map[e.dateKey].total+=e.amount;map[e.dateKey].items.push(e)});
+  const grid=document.getElementById('cost-cal-grid');grid.innerHTML='';
+  const firstDay=new Date(costCalYear,costCalMonth,1).getDay();
+  const firstDayMon=(firstDay===0?6:firstDay-1);
+  const dim=new Date(costCalYear,costCalMonth+1,0).getDate();
+  const prevDays=new Date(costCalYear,costCalMonth,0).getDate();
+  const todayKey=getLocalDateKey();
+  const total=firstDayMon+dim;const cells=total%7===0?total:total+(7-total%7);
+  for(let i=0;i<cells;i++){
+    const cell=document.createElement('div');cell.className='calday';
+    let dayNum,dk,isOther=false;
+    if(i<firstDayMon){dayNum=prevDays-firstDayMon+i+1;const pm=costCalMonth===0?11:costCalMonth-1;const py=costCalMonth===0?costCalYear-1:costCalYear;dk=getDateKey(py,pm,dayNum);isOther=true}
+    else if(i>=firstDayMon+dim){dayNum=i-firstDayMon-dim+1;const nm=costCalMonth===11?0:costCalMonth+1;const ny=costCalMonth===11?costCalYear+1:costCalYear;dk=getDateKey(ny,nm,dayNum);isOther=true}
+    else{dayNum=i-firstDayMon+1;dk=getDateKey(costCalYear,costCalMonth,dayNum)}
+    if(isOther)cell.classList.add('other');
+    if(dk===todayKey)cell.classList.add('today');
+    const numEl=document.createElement('div');numEl.className='cdn';numEl.textContent=dayNum;cell.appendChild(numEl);
+    if(map[dk]){
+      const amtEl=document.createElement('div');
+      amtEl.style.cssText='font-size:9px;font-weight:700;color:var(--gold);margin-top:1px';
+      amtEl.textContent=(map[dk].total/1000).toFixed(0)+'k';
+      cell.appendChild(amtEl);
+    }
+    const capDk=dk,capDay=dayNum;cell.onclick=()=>openCostDetail(capDk,capDay);grid.appendChild(cell);
+  }
+}
+function openCostDetail(dk,dayNum){
+  const data=loadCost();const entries=data.filter(e=>e.dateKey===dk).sort((a,b)=>b.id-a.id);
+  const [y,m]=dk.split('-').map(Number);
+  document.getElementById('cost-detail-date-label').textContent=y+'년 '+MKO[m-1]+' '+dayNum+'일';
+  const panel=document.getElementById('cost-detail-panel');panel.dataset.dk=dk;panel.dataset.day=dayNum;
+  const list=document.getElementById('cost-detail-list');list.innerHTML='';
+  if(!entries.length){const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em)}
+  else{entries.forEach(e=>{
+    const item=document.createElement('div');item.className='detitem cig';
+    item.style.background=e.brand==='테리아'?'var(--cig-dim)':'var(--trad-dim)';
+    const bEl=document.createElement('span');bEl.className='dtype';
+    bEl.style.color=e.brand==='테리아'?'var(--cig-light)':'var(--trad-light)';
+    bEl.textContent=(e.brand==='테리아'?'🔵 ':'🟤 ')+e.brand;
+    const aEl=document.createElement('span');aEl.className='dcnt';aEl.textContent=e.amount.toLocaleString()+'원';
+    const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
+    delBtn.onclick=(ev)=>{ev.stopPropagation();deleteCost(e.id);openCostDetail(dk,dayNum)};
+    item.appendChild(bEl);item.appendChild(aEl);item.appendChild(delBtn);list.appendChild(item);
+  })}
+  panel.classList.add('open');panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeCostDetail(){document.getElementById('cost-detail-panel').classList.remove('open')}
+
+function exportData(){
+  const data={smoking:load(),cost:loadCost(),exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const date=new Date();
+  a.href=url;a.download='haebojago_'+date.getFullYear()+pad(date.getMonth()+1)+pad(date.getDate())+'.json';
+  a.click();URL.revokeObjectURL(url);
+  showToast('✅ 백업 파일이 저장됐어요');
+}
+function importData(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.smoking||!data.cost){showToast('❌ 올바른 백업 파일이 아니에요');return}
+      if(!confirm('현재 데이터를 덮어쓸까요?\n기존 기록은 사라져요.')){return}
+      save(data.smoking);saveCost(data.cost);
+      showToast('✅ 데이터가 복원됐어요');
+      renderCalendar();renderStats();renderCostCalendar();renderCostList();
+    }catch{showToast('❌ 파일을 읽는 중 오류가 발생했어요')}
+  };
+  reader.readAsText(file);
+  event.target.value='';
 }
 updateAddBtn();
 </script>
