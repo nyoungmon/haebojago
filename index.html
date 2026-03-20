@@ -529,6 +529,8 @@ function importData(event){
   event.target.value='';
 }
 updateAddBtn();
+document.querySelector('#page-calendar .eyebrow').textContent=calYear+'년 '+MKO[calMonth];
+document.querySelector('#page-cost .eyebrow').textContent=costCalYear+'년 '+MKO[costCalMonth];
 </script>
 </body>
 </html>
