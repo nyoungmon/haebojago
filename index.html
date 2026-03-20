@@ -14,7 +14,7 @@
       --surface2: #2a2a2a;
       --cig: #4a7c59; --cig-light: #6aaf7e; --cig-dim: rgba(74,124,89,0.15);
       --trad: #b87333; --trad-light: #d4944a; --trad-dim: rgba(184,115,51,0.15);
-      --text: #1a1a1a; --text-sec: #444444; --text-muted: #888888;
+      --text: #f0f0f0; --text-sec: #cccccc; --text-muted: #888888;
       --border: rgba(255,255,255,0.07);      --font: 'Pretendard', -apple-system, sans-serif;
     }
     html, body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
@@ -32,13 +32,13 @@
     /* 헤더 */
     .hdr { margin-bottom: 1.8rem; }
     .hdr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .3rem; }
-    .hdr h1 { font-size: 30px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.03em; }
+    .hdr h1 { font-size: 30px; font-weight: 700; color: #f0f0f0; letter-spacing: -0.03em; }
     .hdr-icon { font-size: 26px; }
     .hdr-status { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--cig-light); font-weight: 500; }
     .hdr-status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cig-light); display: inline-block; }
 
     /* 섹션 */
-    .section-title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; letter-spacing: -0.02em; }
+    .section-title { font-size: 18px; font-weight: 700; color: #f0f0f0; margin-bottom: 4px; letter-spacing: -0.02em; }
     .section-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 1rem; }
 
     /* 카드 */
@@ -249,7 +249,7 @@
     <div class="stats" style="margin-bottom:10px">
       <div class="stat">
         <div class="stat-lbl">이번 달 총합</div>
-        <div class="stat-val" id="cost-month-total" style="color:#6aaf7e;font-size:15px">0원</div>
+        <div class="stat-val" id="cost-month-total" style="color:#f0f0f0;font-size:15px">0원</div>
         <div class="stat-sub">지출</div>
       </div>
       <div class="stat">
@@ -582,6 +582,7 @@
       const marlboroPacks = Math.round(marlboroTotal / PRICE['말보루'] * 10) / 10;
       const totalPacks = Math.round((tereaTotal / PRICE['테리아'] + marlboroTotal / PRICE['말보루']) * 10) / 10;
       document.getElementById('cost-month-total').textContent = total.toLocaleString() + '원 (' + totalPacks + '갑)';
+      document.getElementById('cost-month-total').style.color = '#f0f0f0';
       document.getElementById('cost-month-count').textContent = mData.length;
       document.getElementById('cost-terea-total').textContent = tereaTotal.toLocaleString() + '원 (' + tereaPacks + '갑)';
       document.getElementById('cost-marlboro-total').textContent = marlboroTotal.toLocaleString() + '원 (' + marlboroPacks + '갑)';
