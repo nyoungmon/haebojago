@@ -314,25 +314,27 @@ function renderCalendar(){
 function openDetail(dk,dayNum){
   const panel=document.getElementById('detail-panel');
   if(panel.classList.contains('open')&&panel.dataset.dk===dk){closeDetail();return}
-  const data=load();const entries=data.filter(e=>e.dateKey===dk).sort((a,b)=>a.ts.localeCompare(b.ts));
+  const data=load();const entries=data.filter(e=>e.dateKey===dk);
   const [y,m]=dk.split('-').map(Number);
   document.getElementById('detail-date-label').textContent=y+'년 '+MKO[m-1]+' '+dayNum+'일';
   panel.dataset.dk=dk;panel.dataset.day=dayNum;
   const list=document.getElementById('detail-list');list.innerHTML='';
-  if(!entries.length){const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em)}
-  else{entries.forEach(e=>{
-    const item=document.createElement('div');item.className='detitem '+e.type;
-    const typeEl=document.createElement('span');typeEl.className='dtype';typeEl.textContent=e.type==='cig'?'🔵 테리아':'🟤 말보루';
-    const cntInput=document.createElement('input');
-    cntInput.type='number';cntInput.min='1';cntInput.max='99';cntInput.value=e.count;
-    cntInput.style.cssText='width:48px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
-    cntInput.onchange=()=>{const v=Math.max(1,Math.min(99,parseInt(cntInput.value)||1));cntInput.value=v;const all=load();const idx=all.findIndex(x=>x.id===e.id);if(idx>-1){all[idx].count=v;save(all);renderCalendar();renderStats()}};
-    const unitEl=document.createElement('span');unitEl.style.cssText='font-size:11px;color:var(--text-muted)';unitEl.textContent='개비';
-    const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
-    delBtn.onclick=(ev)=>{ev.stopPropagation();deleteEntry(e.id)};
-    item.appendChild(typeEl);item.appendChild(cntInput);item.appendChild(unitEl);item.appendChild(delBtn);
-    list.appendChild(item);
-  })}
+  if(!entries.length){
+    const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em);
+  } else {
+    const cigTotal=entries.filter(e=>e.type==='cig').reduce((a,e)=>a+e.count,0);
+    const tradTotal=entries.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
+    [['cig',cigTotal],['trad',tradTotal]].forEach(([type,total])=>{
+      if(!total)return;
+      const item=document.createElement('div');item.className='detitem '+type;
+      const typeEl=document.createElement('span');typeEl.className='dtype';
+      typeEl.textContent=type==='cig'?'🔵 테리아':'🟤 말보루';
+      const cntEl=document.createElement('span');cntEl.className='dcnt';
+      cntEl.textContent=total+'개비';
+      item.appendChild(typeEl);item.appendChild(cntEl);
+      list.appendChild(item);
+    });
+  }
   panel.classList.add('open');panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function closeDetail(){document.getElementById('detail-panel').classList.remove('open')}
