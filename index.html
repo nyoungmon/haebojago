@@ -145,12 +145,12 @@
       <button class="tbtn2" id="btn-trad" onclick="selectType('trad')"><span class="ico">🟤</span><span class="lbl">말보루</span></button>
     </div>
     <div class="csec">
-      <div class="clbl">개비 수</div>
+      <div class="clbl">개 수</div>
       <div class="cwrap">
         <button class="step" onclick="stepCount(-1)">−</button>
         <input class="cval" type="number" id="count-input" min="1" max="99" value="1" oninput="onCountInput(this)"/>
         <button class="step" onclick="stepCount(1)">+</button>
-        <span class="cunit">개비</span>
+        
       </div>
     </div>
     <button class="rbtn cig" id="add-btn" onclick="addEntry()">테리아 1개비 기록</button>
@@ -209,9 +209,9 @@
   </div>
   <div class="slbl">🚬 흡연 통계</div>
   <div class="sgrid">
-    <div class="sc"><div class="sclbl">월 총합</div><div class="sdual"><span class="num c" id="s-month-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-month-trad">0</span><span class="unit">말보루</span></div><div class="scsub">개비</div></div>
-    <div class="sc"><div class="sclbl">오늘</div><div class="sdual"><span class="num c" id="s-today-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-today-trad">0</span><span class="unit">말보루</span></div><div class="scsub">개비</div></div>
-    <div class="sc" style="grid-column:span 2"><div class="sclbl">이번 달 최다 흡연일</div><div class="scval" id="s-max-date" style="font-size:18px">-</div><div class="scsub" id="s-max-sub"></div></div>
+    <div class="sc"><div class="sclbl" id="s-month-label">월 총합</div><div class="sdual"><span class="num c" id="s-month-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-month-trad">0</span><span class="unit">말보루</span></div></div>
+    <div class="sc"><div class="sclbl">오늘</div><div class="sdual"><span class="num c" id="s-today-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-today-trad">0</span><span class="unit">말보루</span></div></div>
+    <div class="sc" style="grid-column:span 2"><div class="sclbl" id="s-max-label">이번 달 최다 흡연일</div><div class="scval" id="s-max-date" style="font-size:18px">-</div><div class="scsub" id="s-max-sub"></div></div>
   </div>
 </div>
 
@@ -235,9 +235,9 @@
   </div>
   <div class="slbl">💰 비용 통계</div>
   <div class="sgrid" style="margin-bottom:12px">
-    <div class="sc"><div class="sclbl">테리아</div><div class="scval" id="cost-terea-total" style="color:var(--cig-light);font-size:16px">0원</div><div class="scsub">이번 달</div></div>
-    <div class="sc"><div class="sclbl">말보루</div><div class="scval" id="cost-marlboro-total" style="color:var(--trad-light);font-size:16px">0원</div><div class="scsub">이번 달</div></div>
-    <div class="sc" style="grid-column:span 2"><div class="sclbl">월 총합</div><div class="scval" id="cost-month-total" style="font-size:20px">0원</div><div class="scsub">지출</div></div>
+    <div class="sc"><div class="sclbl">테리아</div><div class="scval" id="cost-terea-total" style="color:var(--cig-light);font-size:16px">0원</div><div class="scsub" id="cost-terea-sub">이번 달</div></div>
+    <div class="sc"><div class="sclbl">말보루</div><div class="scval" id="cost-marlboro-total" style="color:var(--trad-light);font-size:16px">0원</div><div class="scsub" id="cost-marlboro-sub">이번 달</div></div>
+    <div class="sc" style="grid-column:span 2"><div class="sclbl" id="cost-total-label">월 총합</div><div class="scval" id="cost-month-total" style="font-size:20px">0원</div><div class="scsub">지출</div></div>
   </div>
 </div>
 
@@ -279,8 +279,16 @@ updateTodayLabel();setInterval(updateTodayLabel,60000);
 function onCountInput(el){let v=parseInt(el.value);if(isNaN(v)||v<1)v=1;if(v>99)v=99;selCount=v;el.value=v;updateAddBtn()}
 function stepCount(delta){const el=document.getElementById('count-input');let v=Math.max(1,Math.min(99,(parseInt(el.value)||1)+delta));el.value=v;selCount=v;updateAddBtn()}
 function selectType(t){selType=t;document.getElementById('btn-cig').className='tbtn2'+(t==='cig'?' ac':'');document.getElementById('btn-trad').className='tbtn2'+(t==='trad'?' at':'');updateAddBtn()}
-function updateAddBtn(){const btn=document.getElementById('add-btn');btn.textContent=(selType==='cig'?'테리아':'말보루')+' '+selCount+'개비 기록';btn.className='rbtn '+selType}
-function addEntry(){const dateVal=document.getElementById('input-date').value;if(!dateVal){showToast('날짜를 입력해주세요');return}const entry={id:Date.now(),ts:dateVal,type:selType,count:selCount,dateKey:dateVal};const data=load();data.push(entry);save(data);showToast((selType==='cig'?'🔵 테리아':'🟤 말보루')+' '+selCount+'개비 기록됐어요')}
+function updateAddBtn(){const btn=document.getElementById('add-btn');btn.textContent=(selType==='cig'?'테리아':'말보루')+' '+selCount+'개 기록';btn.className='rbtn '+selType}
+function addEntry(){
+  const dateVal=document.getElementById('input-date').value;
+  if(!dateVal){showToast('날짜를 입력해주세요');return}
+  const recorded=selCount;const recordedType=selType;
+  const entry={id:Date.now(),ts:dateVal,type:selType,count:selCount,dateKey:dateVal};
+  const data=load();data.push(entry);save(data);
+  setNow();selectType('cig');selCount=1;document.getElementById('count-input').value=1;updateAddBtn();
+  showToast((recordedType==='cig'?'🔵 테리아':'🟤 말보루')+' '+recorded+'개 기록됐어요');
+}
 function deleteEntry(id){save(load().filter(e=>e.id!==id));renderCalendar();renderStats();const panel=document.getElementById('detail-panel');if(panel.classList.contains('open'))openDetail(panel.dataset.dk,panel.dataset.day)}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function updateCalEyebrow(){document.querySelector('#page-calendar .eyebrow').textContent=calYear+'년 '+MKO[calMonth]}
@@ -322,16 +330,52 @@ function openDetail(dk,dayNum){
   if(!entries.length){
     const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em);
   } else {
-    const cigTotal=entries.filter(e=>e.type==='cig').reduce((a,e)=>a+e.count,0);
-    const tradTotal=entries.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
-    [['cig',cigTotal],['trad',tradTotal]].forEach(([type,total])=>{
+    const cigEntries=entries.filter(e=>e.type==='cig');
+    const tradEntries=entries.filter(e=>e.type==='trad');
+    const cigTotal=cigEntries.reduce((a,e)=>a+e.count,0);
+    const tradTotal=tradEntries.reduce((a,e)=>a+e.count,0);
+    [['cig',cigTotal,cigEntries],['trad',tradTotal,tradEntries]].forEach(([type,total,group])=>{
       if(!total)return;
       const item=document.createElement('div');item.className='detitem '+type;
       const typeEl=document.createElement('span');typeEl.className='dtype';
       typeEl.textContent=type==='cig'?'🔵 테리아':'🟤 말보루';
-      const cntEl=document.createElement('span');cntEl.className='dcnt';
-      cntEl.textContent=total+'개비';
-      item.appendChild(typeEl);item.appendChild(cntEl);
+      const cntInput=document.createElement('input');
+      cntInput.type='number';cntInput.min='1';cntInput.max='999';cntInput.value=total;
+      cntInput.style.cssText='width:52px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
+      cntInput.onchange=()=>{
+        const newVal=Math.max(1,parseInt(cntInput.value)||1);cntInput.value=newVal;
+        const diff=newVal-total;
+        const all=load();
+        if(diff>0){
+          // 증가: 첫 번째 기록에 diff 추가
+          const idx=all.findIndex(x=>x.id===group[0].id);
+          if(idx>-1){all[idx].count+=diff;save(all);}
+        } else if(diff<0){
+          // 감소: 뒤에서부터 차감
+          let rem=Math.abs(diff);
+          for(let i=group.length-1;i>=0&&rem>0;i--){
+            const idx=all.findIndex(x=>x.id===group[i].id);
+            if(idx>-1){
+              if(all[idx].count<=rem){rem-=all[idx].count;all.splice(idx,1);}
+              else{all[idx].count-=rem;rem=0;}
+            }
+          }
+          save(all);
+        }
+        renderCalendar();renderStats();openDetail(dk,dayNum);
+      };
+      const unitEl=document.createElement('span');unitEl.style.cssText='font-size:11px;color:var(--text-muted);flex:1';unitEl.textContent='개';
+      const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
+      delBtn.title=(type==='cig'?'테리아':'말보루')+' 기록 전체 삭제';
+      delBtn.onclick=(ev)=>{
+        ev.stopPropagation();
+        if(!confirm((type==='cig'?'테리아':'말보루')+' '+total+'개 기록을 모두 삭제할까요?'))return;
+        const all=load();
+        save(all.filter(e=>!(e.dateKey===dk&&e.type===type)));
+        renderCalendar();renderStats();
+        openDetail(dk,dayNum);
+      };
+      item.appendChild(typeEl);item.appendChild(cntInput);item.appendChild(unitEl);item.appendChild(delBtn);
       list.appendChild(item);
     });
   }
@@ -346,13 +390,17 @@ function renderStats(){
   document.getElementById('s-today-trad').textContent=todayE.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
   // 월 총합/최대는 캘린더 월 기준
   const mP=calYear+'-'+pad(calMonth+1);const mE=data.filter(e=>e.dateKey.startsWith(mP));
+  const monthLbl=document.getElementById('s-month-label');
+  if(monthLbl)monthLbl.textContent=MKO[calMonth]+' 총합';
   document.getElementById('s-month-cig').textContent=mE.filter(e=>e.type==='cig').reduce((a,e)=>a+e.count,0);
   document.getElementById('s-month-trad').textContent=mE.filter(e=>e.type==='trad').reduce((a,e)=>a+e.count,0);
   const dm={};mE.forEach(e=>{dm[e.dateKey]=(dm[e.dateKey]||0)+e.count});
   const maxDate=Object.keys(dm).sort((a,b)=>dm[b]-dm[a])[0];
   const maxEl=document.getElementById('s-max-date');
   const maxSub=document.getElementById('s-max-sub');
-  if(maxDate){const [y,mo,d]=maxDate.split('-').map(Number);maxEl.textContent=MKO[mo-1]+' '+d+'일';maxSub.textContent=dm[maxDate]+'개비'}
+  const maxLabel=document.getElementById('s-max-label');
+  if(maxLabel)maxLabel.textContent=MKO[calMonth]+' 최다 흡연일';
+  if(maxDate){const [y,mo,d]=maxDate.split('-').map(Number);maxEl.textContent=MKO[mo-1]+' '+d+'일';maxSub.textContent=dm[maxDate]+'개 수'}
   else{maxEl.textContent='-';maxSub.textContent=''}
 }
 function scheduleNextRefresh(){const n=new Date();const ms=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n;setTimeout(()=>{renderCalendar();renderStats();updateTodayLabel();scheduleNextRefresh()},ms+100)}
@@ -370,7 +418,9 @@ function addCost(){
   const dateVal=document.getElementById('cost-date').value;const amount=parseInt(document.getElementById('cost-amount').value);
   if(!dateVal){showToast('날짜를 입력해주세요');return}if(!amount||amount<=0){showToast('금액을 입력해주세요');return}
   const entry={id:Date.now(),dateKey:dateVal,amount,brand:selBrand};const data=loadCost();data.push(entry);saveCost(data);
-  document.getElementById('cost-amount').value='';showToast('💰 '+amount.toLocaleString()+'원 기록됐어요');renderCostList();
+  document.getElementById('cost-amount').value='';
+  setCostDateNow();selectBrand('테리아');
+  showToast('💰 '+amount.toLocaleString()+'원 기록됐어요');renderCostList();
 }
 function deleteCost(id){saveCost(loadCost().filter(e=>e.id!==id));renderCostList()}
 function renderCostList(){
@@ -386,6 +436,10 @@ function renderCostList(){
   if($('cost-month-total')){$('cost-month-total').textContent=tot.toLocaleString()+'원 ('+totPk+'갑)'}
   if($('cost-terea-total'))$('cost-terea-total').textContent=tT.toLocaleString()+'원 ('+tPk+'갑)';
   if($('cost-marlboro-total'))$('cost-marlboro-total').textContent=mT.toLocaleString()+'원 ('+mPk+'갑)';
+  const monthLabel=MKO[costCalMonth];
+  if($('cost-terea-sub'))$('cost-terea-sub').textContent=monthLabel;
+  if($('cost-marlboro-sub'))$('cost-marlboro-sub').textContent=monthLabel;
+  if($('cost-total-label'))$('cost-total-label').textContent=monthLabel+' 총합';
 }
 // 비용 캘린더
 let costCalYear=new Date().getFullYear(),costCalMonth=new Date().getMonth();
