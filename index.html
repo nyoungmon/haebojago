@@ -136,10 +136,8 @@
     <h1><b>해보자고</b></h1>
   </div>
   <div class="today-txt" id="today-label"></div>
-
-  <!-- 흡연 기록 -->
   <div class="slbl">🚬 흡연 기록</div>
-  <div class="card" style="border-left:2px solid rgba(255,255,255,0.3)">
+  <div class="card">
     <div class="fld"><label>날짜</label><input class="finput" type="date" id="input-date"/></div>
     <button class="tbtn" onclick="setNow()">⏱ 오늘 날짜로 채우기</button>
     <div class="trow">
@@ -158,22 +156,6 @@
     <button class="rbtn cig" id="add-btn" onclick="addEntry()">테리아 1개비 기록</button>
   </div>
 
-  <!-- 비용 기록 -->
-  <div class="slbl" style="margin-top:1.2rem">💰 비용 기록</div>
-  <div class="card" style="border-left:2px solid var(--gold)">
-    <div class="fld"><label>날짜</label><input class="finput" type="date" id="cost-date"/></div>
-    <div class="fld"><label>금액 (원)</label><input class="finput" type="number" id="cost-amount" placeholder="예: 6500" inputmode="numeric"/></div>
-    <div class="fld" style="margin-bottom:12px">
-      <label>종류</label>
-      <div class="brow" style="margin-bottom:0">
-        <button class="bbtn" id="brand-terea" onclick="selectBrand('테리아')">🔵 테리아</button>
-        <button class="bbtn" id="brand-marlboro" onclick="selectBrand('말보루')">🟤 말보루</button>
-      </div>
-    </div>
-    <button class="tbtn" onclick="setCostDateNow()" style="margin-bottom:12px">⏱ 오늘 날짜로 채우기</button>
-    <button class="costbtn" onclick="addCost()">💰 비용 기록</button>
-  </div>
-
   <!-- 데이터 백업 -->
   <div class="slbl" style="margin-top:1.2rem">🗄️ 데이터 백업</div>
   <div class="card" style="border-left:2px solid var(--text-muted)">
@@ -186,10 +168,31 @@
   </div>
 </div>
 
+<div class="page" id="page-cost-record">
+  <div class="hdr">
+    <div class="eyebrow">이번 달 지출</div>
+    <h1><b>비용 기록</b></h1>
+  </div>
+  <div class="slbl">💰 비용 기록</div>
+  <div class="card">
+    <div class="fld"><label>날짜</label><input class="finput" type="date" id="cost-date"/></div>
+    <button class="tbtn" onclick="setCostDateNow()" style="margin-bottom:12px">⏱ 오늘 날짜로 채우기</button>
+    <div class="fld" style="margin-bottom:12px">
+      <label>종류</label>
+      <div class="brow" style="margin-bottom:0">
+        <button class="bbtn" id="brand-terea" onclick="selectBrand('테리아')">🔵 테리아</button>
+        <button class="bbtn" id="brand-marlboro" onclick="selectBrand('말보루')">🟤 말보루</button>
+      </div>
+    </div>
+    <div class="fld"><label>금액 (원)</label><input class="finput" type="number" id="cost-amount" placeholder="예: 6500" inputmode="numeric"/></div>
+    <button class="costbtn" onclick="addCost()" style="margin-top:4px">💰 비용 기록</button>
+  </div>
+</div>
+
 <div class="page" id="page-calendar">
   <div class="hdr">
     <div class="eyebrow">월별 기록 보기</div>
-    <h1><b>개 수 기록</b></h1>
+    <h1><b>얼마나 폈나</b></h1>
   </div>
   <div class="card">
     <div class="calhdr">
@@ -215,7 +218,7 @@
 <div class="page" id="page-cost">
   <div class="hdr">
     <div class="eyebrow">월별 지출 보기</div>
-    <h1><b>담배 비용</b></h1>
+    <h1><b>담배값</b></h1>
   </div>
   <div class="card">
     <div class="calhdr">
@@ -230,7 +233,7 @@
       <div class="detlist" id="cost-detail-list"></div>
     </div>
   </div>
-  <div class="slbl">💰 지출 통계</div>
+  <div class="slbl">💰 비용 통계</div>
   <div class="sgrid" style="margin-bottom:12px">
     <div class="sc"><div class="sclbl">테리아</div><div class="scval" id="cost-terea-total" style="color:var(--cig-light);font-size:16px">0원</div><div class="scsub">이번 달</div></div>
     <div class="sc"><div class="sclbl">말보루</div><div class="scval" id="cost-marlboro-total" style="color:var(--trad-light);font-size:16px">0원</div><div class="scsub">이번 달</div></div>
@@ -239,9 +242,10 @@
 </div>
 
 <nav class="nav">
-  <button class="nb active" id="nav-record" onclick="goPage('record')"><span class="ni">✏️</span><span class="nl">해보자고</span></button>
+  <button class="nb active" id="nav-record" onclick="goPage('record')"><span class="ni">🚬</span><span class="nl">흡연</span></button>
+  <button class="nb" id="nav-cost-record" onclick="goPage('cost-record')"><span class="ni">💰</span><span class="nl">비용</span></button>
   <button class="nb" id="nav-calendar" onclick="goPage('calendar')"><span class="ni">📅</span><span class="nl">흡연 통계</span></button>
-  <button class="nb" id="nav-cost" onclick="goPage('cost')"><span class="ni">💰</span><span class="nl">지출 통계</span></button>
+  <button class="nb" id="nav-cost" onclick="goPage('cost')"><span class="ni">💸</span><span class="nl">비용 통계</span></button>
 </nav>
 <div class="toast" id="toast"></div>
 
@@ -262,9 +266,11 @@ function goPage(name){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if(name==='record'){setNow();setCostDateNow();selectBrand('테리아')}
-  if(name==='calendar'){renderCalendar();renderStats()}
-  if(name==='cost'){renderCostCalendar();renderCostList()}
+  closeDetail();closeCostDetail();
+  if(name==='record'){setNow()}
+  if(name==='cost-record'){setCostDateNow();selectBrand('테리아')}
+  if(name==='calendar'){renderCalendar();renderStats();updateCalEyebrow()}
+  if(name==='cost'){renderCostCalendar();renderCostList();updateCostEyebrow()}
 }
 function setNow(){const n=new Date();document.getElementById('input-date').value=n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate())}
 setNow();
@@ -277,7 +283,9 @@ function updateAddBtn(){const btn=document.getElementById('add-btn');btn.textCon
 function addEntry(){const dateVal=document.getElementById('input-date').value;if(!dateVal){showToast('날짜를 입력해주세요');return}const entry={id:Date.now(),ts:dateVal,type:selType,count:selCount,dateKey:dateVal};const data=load();data.push(entry);save(data);showToast((selType==='cig'?'🔵 테리아':'🟤 말보루')+' '+selCount+'개비 기록됐어요')}
 function deleteEntry(id){save(load().filter(e=>e.id!==id));renderCalendar();renderStats();const panel=document.getElementById('detail-panel');if(panel.classList.contains('open'))openDetail(panel.dataset.dk,panel.dataset.day)}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function changeMonth(delta){calMonth+=delta;if(calMonth>11){calMonth=0;calYear++}if(calMonth<0){calMonth=11;calYear--}renderCalendar();renderStats()}
+function updateCalEyebrow(){document.querySelector('#page-calendar .eyebrow').textContent=calYear+'년 '+MKO[calMonth]}
+function updateCostEyebrow(){document.querySelector('#page-cost .eyebrow').textContent=costCalYear+'년 '+MKO[costCalMonth]}
+function changeMonth(delta){calMonth+=delta;if(calMonth>11){calMonth=0;calYear++}if(calMonth<0){calMonth=11;calYear--}renderCalendar();renderStats();updateCalEyebrow()}
 function getDateKey(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
 function renderCalendar(){
   document.getElementById('cal-month-label').textContent=calYear+'년 '+MKO[calMonth];
@@ -304,25 +312,21 @@ function renderCalendar(){
   }
 }
 function openDetail(dk,dayNum){
+  const panel=document.getElementById('detail-panel');
+  if(panel.classList.contains('open')&&panel.dataset.dk===dk){closeDetail();return}
   const data=load();const entries=data.filter(e=>e.dateKey===dk).sort((a,b)=>a.ts.localeCompare(b.ts));
   const [y,m]=dk.split('-').map(Number);
   document.getElementById('detail-date-label').textContent=y+'년 '+MKO[m-1]+' '+dayNum+'일';
-  const panel=document.getElementById('detail-panel');panel.dataset.dk=dk;panel.dataset.day=dayNum;
+  panel.dataset.dk=dk;panel.dataset.day=dayNum;
   const list=document.getElementById('detail-list');list.innerHTML='';
   if(!entries.length){const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em)}
   else{entries.forEach(e=>{
     const item=document.createElement('div');item.className='detitem '+e.type;
     const typeEl=document.createElement('span');typeEl.className='dtype';typeEl.textContent=e.type==='cig'?'🔵 테리아':'🟤 말보루';
-    // 수정 가능한 개비 수 입력
     const cntInput=document.createElement('input');
     cntInput.type='number';cntInput.min='1';cntInput.max='99';cntInput.value=e.count;
     cntInput.style.cssText='width:48px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
-    cntInput.onchange=()=>{
-      const v=Math.max(1,Math.min(99,parseInt(cntInput.value)||1));
-      cntInput.value=v;
-      const all=load();const idx=all.findIndex(x=>x.id===e.id);
-      if(idx>-1){all[idx].count=v;save(all);renderCalendar();renderStats();}
-    };
+    cntInput.onchange=()=>{const v=Math.max(1,Math.min(99,parseInt(cntInput.value)||1));cntInput.value=v;const all=load();const idx=all.findIndex(x=>x.id===e.id);if(idx>-1){all[idx].count=v;save(all);renderCalendar();renderStats()}};
     const unitEl=document.createElement('span');unitEl.style.cssText='font-size:11px;color:var(--text-muted)';unitEl.textContent='개비';
     const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
     delBtn.onclick=(ev)=>{ev.stopPropagation();deleteEntry(e.id)};
@@ -383,7 +387,7 @@ function renderCostList(){
 }
 // 비용 캘린더
 let costCalYear=new Date().getFullYear(),costCalMonth=new Date().getMonth();
-function changeCostMonth(delta){costCalMonth+=delta;if(costCalMonth>11){costCalMonth=0;costCalYear++}if(costCalMonth<0){costCalMonth=11;costCalYear--}renderCostCalendar();renderCostList()}
+function changeCostMonth(delta){costCalMonth+=delta;if(costCalMonth>11){costCalMonth=0;costCalYear++}if(costCalMonth<0){costCalMonth=11;costCalYear--}renderCostCalendar();renderCostList();updateCostEyebrow()}
 function renderCostCalendar(){
   document.getElementById('cost-cal-month-label').textContent=costCalYear+'년 '+MKO[costCalMonth];
   const data=loadCost(),map={};
@@ -414,10 +418,12 @@ function renderCostCalendar(){
   }
 }
 function openCostDetail(dk,dayNum){
+  const panel=document.getElementById('cost-detail-panel');
+  if(panel.classList.contains('open')&&panel.dataset.dk===dk){closeCostDetail();return}
   const data=loadCost();const entries=data.filter(e=>e.dateKey===dk).sort((a,b)=>b.id-a.id);
   const [y,m]=dk.split('-').map(Number);
   document.getElementById('cost-detail-date-label').textContent=y+'년 '+MKO[m-1]+' '+dayNum+'일';
-  const panel=document.getElementById('cost-detail-panel');panel.dataset.dk=dk;panel.dataset.day=dayNum;
+  panel.dataset.dk=dk;panel.dataset.day=dayNum;
   const list=document.getElementById('cost-detail-list');list.innerHTML='';
   if(!entries.length){const em=document.createElement('div');em.className='detempty';em.textContent='이날 기록이 없어요';list.appendChild(em)}
   else{entries.forEach(e=>{
@@ -426,10 +432,14 @@ function openCostDetail(dk,dayNum){
     const bEl=document.createElement('span');bEl.className='dtype';
     bEl.style.color=e.brand==='테리아'?'var(--cig-light)':'var(--trad-light)';
     bEl.textContent=(e.brand==='테리아'?'🔵 ':'🟤 ')+e.brand;
-    const aEl=document.createElement('span');aEl.className='dcnt';aEl.textContent=e.amount.toLocaleString()+'원';
+    const aInput=document.createElement('input');
+    aInput.type='number';aInput.min='1';aInput.value=e.amount;aInput.inputMode='numeric';
+    aInput.style.cssText='width:80px;height:28px;text-align:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:var(--text);font-family:var(--fp);font-size:13px;font-weight:700;color-scheme:dark';
+    aInput.onchange=()=>{const v=Math.max(1,parseInt(aInput.value)||1);aInput.value=v;const all=loadCost();const idx=all.findIndex(x=>x.id===e.id);if(idx>-1){all[idx].amount=v;saveCost(all);renderCostCalendar();renderCostList()}};
+    const unitEl=document.createElement('span');unitEl.style.cssText='font-size:11px;color:var(--text-muted)';unitEl.textContent='원';
     const delBtn=document.createElement('button');delBtn.className='ddel';delBtn.textContent='✕';
     delBtn.onclick=(ev)=>{ev.stopPropagation();deleteCost(e.id);openCostDetail(dk,dayNum)};
-    item.appendChild(bEl);item.appendChild(aEl);item.appendChild(delBtn);list.appendChild(item);
+    item.appendChild(bEl);item.appendChild(aInput);item.appendChild(unitEl);item.appendChild(delBtn);list.appendChild(item);
   })}
   panel.classList.add('open');panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
