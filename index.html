@@ -150,8 +150,7 @@
     <div class="card">
       <div class="datetime-row">
         <div class="datetime-field"><label>날짜</label><input class="datetime-input" type="date" id="input-date"/></div>
-        <div class="datetime-field"><label>시간</label><input class="datetime-input" type="time" id="input-time"/></div>
-        <button class="now-btn" onclick="setNow()">⏱ 지금 시각으로 채우기</button>
+        <button class="now-btn" onclick="setNow()">⏱ 오늘 날짜로 채우기</button>
       </div>
       <div class="type-row">
         <button class="type-btn active-cig" id="btn-cig" onclick="selectType('cig')"><span class="ico">🟡</span><span class="lbl">테리아</span></button>
@@ -313,7 +312,6 @@
     function setNow() {
       const n = new Date();
       document.getElementById('input-date').value = n.getFullYear() + '-' + pad(n.getMonth()+1) + '-' + pad(n.getDate());
-      document.getElementById('input-time').value = pad(n.getHours()) + ':' + pad(n.getMinutes());
     }
     setNow();
 
@@ -340,9 +338,8 @@
     }
     function addEntry() {
       const dateVal = document.getElementById('input-date').value;
-      const timeVal = document.getElementById('input-time').value;
-      if (!dateVal || !timeVal) { showToast('날짜와 시간을 입력해주세요'); return; }
-      const entry = { id: Date.now(), ts: dateVal+'T'+timeVal+':00', type: selType, count: selCount, dateKey: dateVal, timeStr: timeVal };
+      if (!dateVal) { showToast('날짜를 입력해주세요'); return; }
+      const entry = { id: Date.now(), ts: dateVal, type: selType, count: selCount, dateKey: dateVal };
       const data = load(); data.push(entry); save(data);
       showToast((selType==='cig' ? '🟡 테리아' : '🔴 말보루') + ' ' + selCount + '개비 기록됐어요');
     }
@@ -399,12 +396,11 @@
       } else {
         entries.forEach(e => {
           const item = document.createElement('div'); item.className='detail-item '+e.type;
-          const timeEl = document.createElement('span'); timeEl.className='d-time'; timeEl.textContent=e.timeStr;
           const typeEl = document.createElement('span'); typeEl.className='d-type'; typeEl.textContent=e.type==='cig'?'🟡 테리아':'🔴 말보루';
           const cntEl = document.createElement('span'); cntEl.className='d-cnt'; cntEl.textContent=e.count+'개비';
           const delBtn = document.createElement('button'); delBtn.className='d-del'; delBtn.textContent='✕';
           delBtn.onclick = (ev) => { ev.stopPropagation(); deleteEntry(e.id); };
-          item.appendChild(timeEl); item.appendChild(typeEl); item.appendChild(cntEl); item.appendChild(delBtn);
+          item.appendChild(typeEl); item.appendChild(cntEl); item.appendChild(delBtn);
           list.appendChild(item);
         });
       }
