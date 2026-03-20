@@ -200,11 +200,39 @@
       <div class="hdr-top"><h1>통계</h1><span class="hdr-icon">📊</span></div>
       <div class="hdr-status">이번 달 기록</div>
     </div>
-    <div class="stats">
+
+    <!-- 흡연 통계 -->
+    <div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;padding-left:2px">🚬 흡연</div>
+    <div class="stats" style="margin-bottom:1.2rem">
       <div class="stat"><div class="stat-lbl">이번 달 총합</div><div class="stat-dual"><span class="num c" id="s-month-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-month-trad">0</span><span class="unit">말보루</span></div><div class="stat-sub">개비</div></div>
       <div class="stat"><div class="stat-lbl">오늘</div><div class="stat-dual"><span class="num c" id="s-today-cig">0</span><span class="unit">테리아</span><span class="num t" id="s-today-trad">0</span><span class="unit">말보루</span></div><div class="stat-sub">개비</div></div>
       <div class="stat"><div class="stat-lbl">기록 일수</div><div class="stat-val" id="s-days">0</div><div class="stat-sub">일째</div></div>
       <div class="stat"><div class="stat-lbl">하루 최대</div><div class="stat-val" id="s-max">0</div><div class="stat-sub">개비 (이번 달)</div></div>
+    </div>
+
+    <!-- 지출 통계 -->
+    <div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;padding-left:2px">💰 지출</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-lbl">이번 달 총합</div>
+        <div class="stat-val" id="cost-month-total" style="color:#f0f0f0;font-size:15px">0원</div>
+        <div class="stat-sub">지출</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">기록 건수</div>
+        <div class="stat-val" id="cost-month-count" style="color:#f0f0f0">0</div>
+        <div class="stat-sub">건</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">테리아</div>
+        <div class="stat-val" id="cost-terea-total" style="color:#6aaf7e;font-size:15px">0원</div>
+        <div class="stat-sub">이번 달</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">말보루</div>
+        <div class="stat-val" id="cost-marlboro-total" style="color:#d4944a;font-size:15px">0원</div>
+        <div class="stat-sub">이번 달</div>
+      </div>
     </div>
   </div>
 
@@ -245,48 +273,6 @@
       <button class="add-btn cig" id="cost-add-btn" onclick="addCost()">💰 비용 기록</button>
     </div>
 
-    <!-- 이번 달 통계 요약 -->
-    <div class="stats" style="margin-bottom:10px">
-      <div class="stat">
-        <div class="stat-lbl">이번 달 총합</div>
-        <div class="stat-val" id="cost-month-total" style="color:#f0f0f0;font-size:15px">0원</div>
-        <div class="stat-sub">지출</div>
-      </div>
-      <div class="stat">
-        <div class="stat-lbl">기록 건수</div>
-        <div class="stat-val" id="cost-month-count" style="color:#f0f0f0">0</div>
-        <div class="stat-sub">건</div>
-      </div>
-      <div class="stat">
-        <div class="stat-lbl">테리아</div>
-        <div class="stat-val" id="cost-terea-total" style="color:#6aaf7e;font-size:15px">0원</div>
-        <div class="stat-sub">이번 달</div>
-      </div>
-      <div class="stat">
-        <div class="stat-lbl">말보루</div>
-        <div class="stat-val" id="cost-marlboro-total" style="color:#d4944a;font-size:15px">0원</div>
-        <div class="stat-sub">이번 달</div>
-      </div>
-    </div>
-
-    <!-- 월별 캘린더 -->
-    <div class="card" style="margin-bottom:10px">
-      <div class="cal-nav">
-        <button class="cal-nav-btn" onclick="changeCostMonth(-1)">‹</button>
-        <span class="cal-month" id="cost-cal-month-label"></span>
-        <button class="cal-nav-btn" onclick="changeCostMonth(1)">›</button>
-      </div>
-      <div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
-      <div class="cal-grid" id="cost-cal-grid"></div>
-      <div class="detail" id="cost-detail-panel">
-        <div class="detail-hdr">
-          <span class="detail-date" id="cost-detail-date-label"></span>
-          <button class="detail-close" onclick="closeCostDetail()">✕</button>
-        </div>
-        <div class="detail-list" id="cost-detail-list"></div>
-      </div>
-    </div>
-
     <!-- 이번 달 내역 -->
     <div class="card">
       <div style="font-size:10px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem">이번 달 내역</div>
@@ -297,8 +283,8 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" id="nav-record" onclick="goPage('record')"><span class="nav-ico">✏️</span><span class="nav-lbl">기록</span></button>
     <button class="nav-btn" id="nav-calendar" onclick="goPage('calendar')"><span class="nav-ico">📅</span><span class="nav-lbl">캘린더</span></button>
-    <button class="nav-btn" id="nav-stats" onclick="goPage('stats')"><span class="nav-ico">📊</span><span class="nav-lbl">통계</span></button>
     <button class="nav-btn" id="nav-cost" onclick="goPage('cost')"><span class="nav-ico">💰</span><span class="nav-lbl">비용</span></button>
+    <button class="nav-btn" id="nav-stats" onclick="goPage('stats')"><span class="nav-ico">📊</span><span class="nav-lbl">통계</span></button>
   </nav>
   <div class="toast" id="toast"></div>
 
@@ -320,8 +306,8 @@
       document.getElementById('page-' + name).classList.add('active');
       document.getElementById('nav-' + name).classList.add('active');
       if (name === 'calendar') renderCalendar();
-      if (name === 'stats') renderStats();
-      if (name === 'cost') { setCostDateNow(); selectBrand('테리아'); renderCost(); }
+      if (name === 'stats') { renderStats(); renderCostList(); }
+      if (name === 'cost') { setCostDateNow(); selectBrand('테리아'); renderCostList(); }
     }
 
     function setNow() {
@@ -616,7 +602,7 @@
       });
     }
 
-    function renderCost() { renderCostCalendar(); renderCostList(); }
+    function renderCost() { renderCostList(); }
 
     updateAddBtn();
   </script>
